@@ -1,4 +1,5 @@
-#include "appskeleton.h"
+﻿#include "appskeleton.h"
+#include "mesh.h"
 
 #include <QToolBar>
 #include <QIcon>
@@ -6,13 +7,14 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QStatusBar>
+#include <QFileDialog>
 
 AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
 {
     // Register new images we will use as icons
-    QPixmap newFilePix(":pics/pics/clay-icon-new-file.png");
-    QPixmap openFilePix(":pics/pics/clay-icon-open-file.png");
-    QPixmap quitPix(":pics/pics/clay-icon-exit.png");
+    newFilePix = QPixmap(":img/icon-new-file.png");
+    openFilePix = QPixmap(":img/icon-open-file.png");
+    quitPix = QPixmap(":img/icon-quit.png");
 
     // Adding actions for menu
     QAction *quit = new QAction("&Quit", this);
@@ -29,16 +31,17 @@ AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
 
     // Adding actions for toolbar
     toolbar->addAction(QIcon(newFilePix),"New File");                               // Add a 'New File' action to toolbar
-    toolbar->addAction(QIcon(openFilePix),"Open File");                             // Add a 'Open File' action to toolbar
+    QAction *openTool = toolbar->addAction(QIcon(openFilePix), "Open File");        // Add a 'Open File' action to toolbar
     toolbar->addSeparator();                                                        // Separator --------------------
-    QAction *quitTool = toolbar->addAction(QIcon(quitPix), "Quit Application");     // Add a 'Quit' action to toolbar
+    QAction *quitTool = toolbar->addAction(QIcon(quitPix), "Quit");                 // Add a 'Quit' action to toolbar
 
+    connect(openTool, &QAction::triggered, this, &AppSkeleton::openFileDialog);
     connect(quitTool, &QAction::triggered, qApp, &QApplication::quit);
+}
 
-//    //Declare a 3D View
-//    MeshView *view = new MeshView(this);
-//    // Convert 3D view into a QWidget
-//    QWidget *container = QWidget::createWindowContainer(view);
-//    // Add widget with the 3D view into the main window
-//    layout()->addWidget(view);
+void AppSkeleton::openFileDialog()
+{
+    Mesh mesh;
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::homePath(),("*.ply"));
+    mesh.setFilePath(QUrl::fromLocalFile(filePath));
 }

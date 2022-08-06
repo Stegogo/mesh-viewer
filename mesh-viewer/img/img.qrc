@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>icon-quit.png</file>
+        <file>icon-open-file.png</file>
+        <file>icon-new-file.png</file>
+    </qresource>
+</RCC>

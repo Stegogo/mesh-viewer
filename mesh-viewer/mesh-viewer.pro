@@ -12,11 +12,13 @@ CONFIG += c++11
 SOURCES += \
     appskeleton.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    mesh.cpp
 
 HEADERS += \
     appskeleton.h \
-    mainwindow.h
+    mainwindow.h \
+    mesh.h
 
 FORMS += \
     mainwindow.ui
@@ -25,3 +27,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    img/img.qrc
