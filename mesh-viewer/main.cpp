@@ -1,4 +1,3 @@
-#include "mainwindow.h"
 #include "appskeleton.h"
 #include "camcontroller.h"
 #include "view3d.h"
@@ -39,6 +38,7 @@ int main(int argc, char *argv[])
     vLayout->setAlignment(Qt::AlignTop);
     hLayout->addWidget(container, 1);
     hLayout->addLayout(vLayout);
+    view->setWidget(container);
 
     QPushButton *add = new QPushButton("button");
     vLayout->addWidget(add);
@@ -59,6 +59,9 @@ int main(int argc, char *argv[])
     mw.setCentralWidget(widget);
     mw.show();
     mw.resize(800, 600);
+
+
+
     return a.exec();
 }
 

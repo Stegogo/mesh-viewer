@@ -16,6 +16,11 @@
 #include <Qt3DInput/QWheelEvent>
 #include <Qt3DInput/QMouseHandler>
 
+//================================================
+// CAM CONTROLLER CLASS
+// Custom camera controller.
+//================================================
+
 class CamController : public Qt3DCore::QEntity
 {
     Q_OBJECT

@@ -12,20 +12,19 @@ CONFIG += c++11
 SOURCES += \
     appskeleton.cpp \
     camcontroller.cpp \
+    captionwidget.cpp \
     main.cpp \
-    mainwindow.cpp \
     mesh.cpp \
     view3d.cpp
 
 HEADERS += \
     appskeleton.h \
     camcontroller.h \
-    mainwindow.h \
+    captionwidget.h \
     mesh.h \
     view3d.h
 
-FORMS += \
-    mainwindow.ui
+FORMS +=
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

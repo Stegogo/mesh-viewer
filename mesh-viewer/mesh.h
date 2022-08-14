@@ -5,6 +5,12 @@
 #include <Qt3DCore/QEntity>
 #include <QString>
 
+
+//================================================
+// MESH CLASS
+// Describes a mesh.
+//================================================
+
 class Mesh
 {
 public:

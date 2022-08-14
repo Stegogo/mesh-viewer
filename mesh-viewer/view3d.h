@@ -8,16 +8,25 @@
 #include <QPainter>
 #include <QWheelEvent>
 
+//================================================
+// VIEW 3D CLASS
+// Manages events for 3D window, e.g. wheelEvent.
+//================================================
+
 class View3D : public Qt3DExtras::Qt3DWindow
 {
     Q_OBJECT
 public:
     View3D();
     void setCamera(Qt3DRender::QCamera *newCamera);
+    void setWidget(QWidget *newContainer);
 protected:
     void wheelEvent(QWheelEvent *event);
+    void paintEvent(QPaintEvent *event);
+    void drawLines(QPainter *qp);
 private:
     Qt3DRender::QCamera *m_camera;
+    QWidget *m_container;
 };
 
 #endif // VIEW3D_H
