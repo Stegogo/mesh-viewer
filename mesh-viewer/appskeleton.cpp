@@ -1,5 +1,5 @@
 ﻿#include "appskeleton.h"
-#include "mesh.h"
+
 
 #include <QToolBar>
 #include <QIcon>
@@ -8,9 +8,15 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QFileDialog>
+#include <QDebug>
+#include <QtCore/QEvent>
+#include <QPainter>
+
 
 AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
 {
+    mesh = new Mesh();
+
     // Register new images we will use as icons
     newFilePix = QPixmap(":img/icon-new-file.png");
     openFilePix = QPixmap(":img/icon-open-file.png");
@@ -35,13 +41,29 @@ AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
     toolbar->addSeparator();                                                        // Separator --------------------
     QAction *quitTool = toolbar->addAction(QIcon(quitPix), "Quit");                 // Add a 'Quit' action to toolbar
 
+    // Add shortcuts
+    quitTool->setShortcut(tr("CTRL+Q"));
+    openTool->setShortcut(tr("CTRL+O"));
+
     connect(openTool, &QAction::triggered, this, &AppSkeleton::openFileDialog);
     connect(quitTool, &QAction::triggered, qApp, &QApplication::quit);
 }
 
 void AppSkeleton::openFileDialog()
 {
-    Mesh mesh;
+    qDebug() << mesh->getFilePath();
     QString filePath = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::homePath(),("*.ply"));
-    mesh.setFilePath(QUrl::fromLocalFile(filePath));
+    mesh->setFilePath(filePath);
+
+    //====================DANGER ZONE=================
+    // It does not actually delete the model and
+    // does not help displaying next
+    mesh = nullptr;
+    //mesh = new Mesh(filePath);
+    //qDebug() << mesh->getFilePath();
+    //================================================
+
+    this->repaint();
+    qApp->processEvents();
 }
+

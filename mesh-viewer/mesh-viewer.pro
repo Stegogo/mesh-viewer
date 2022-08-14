@@ -11,14 +11,18 @@ CONFIG += c++11
 
 SOURCES += \
     appskeleton.cpp \
+    camcontroller.cpp \
     main.cpp \
     mainwindow.cpp \
-    mesh.cpp
+    mesh.cpp \
+    view3d.cpp
 
 HEADERS += \
     appskeleton.h \
+    camcontroller.h \
     mainwindow.h \
-    mesh.h
+    mesh.h \
+    view3d.h
 
 FORMS += \
     mainwindow.ui
@@ -30,3 +34,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     img/img.qrc
+
+DISTFILES +=

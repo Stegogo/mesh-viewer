@@ -3,17 +3,21 @@
 
 #include <QUrl>
 #include <Qt3DCore/QEntity>
+#include <QString>
 
 class Mesh
 {
 public:
     Mesh();
+    Mesh(const QString &filePath);
     Qt3DCore::QEntity *rootEntity;
 
-    QUrl getFilePath();
-    void setFilePath(QUrl filePath);
+    QString getFilePath();
+    void setFilePath(QString filePath);
+
 private:
-    QUrl meshFilePath;
+    QString meshFilePath;
+
 };
 
 #endif // MESH_H
