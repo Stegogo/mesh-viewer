@@ -8,15 +8,17 @@
 #include <Qt3DCore/QTransform>                  // for 3D transform
 #include <Qt3DRender/QMesh>                     // for working with meshes
 #include <Qt3DRender/QCamera>                   // for camera
-#include <Qt3DRender/QPointLight>               // for light
 #include <QDebug>
 #include <Qt3DRender/QSceneLoader>
 #include <Qt3DRender/QAttribute>
 #include <QApplication>
 
+
+
 Mesh::Mesh()
 {
     meshFilePath = "/home/liz/!Work/mesh-viewer/test-meshes/torus-knot.ply";
+
 
     // Setting 3D entities
     rootEntity = new Qt3DCore::QEntity;
@@ -26,22 +28,21 @@ Mesh::Mesh()
     //sceneLoader->setSource(QUrl::fromLocalFile(meshFilePath));
 
     // Setting material
-    Qt3DExtras::QPhongMaterial *material = new Qt3DExtras::QPhongMaterial();
+    material = new Qt3DExtras::QPhongMaterial();
     material->setDiffuse(QColor(254, 254, 254));
 
     // Configuring mesh
-    Qt3DRender::QMesh *entityMesh = new Qt3DRender::QMesh;
-    //entityMesh->setMeshName("Mesh");
-    entityMesh->setSource(QUrl::fromLocalFile(meshFilePath));
-    entity->addComponent(entityMesh);
+    meshEntity = new Qt3DRender::QMesh;
+    meshEntity->setSource(QUrl::fromLocalFile(meshFilePath));
+    entity->addComponent(meshEntity);
     entity->addComponent(material);
 
     Qt3DCore::QTransform *objectTransform = new Qt3DCore::QTransform(entity);
     entity->addComponent(objectTransform);
 
     // Setting light
-    Qt3DCore::QEntity *lightEntity = new Qt3DCore::QEntity(rootEntity);
-    Qt3DRender::QPointLight *light = new Qt3DRender::QPointLight(lightEntity);
+    lightEntity = new Qt3DCore::QEntity(rootEntity);
+    light = new Qt3DRender::QPointLight(lightEntity);
     light->setColor("white");
     light->setIntensity(0.8f);
     lightEntity->addComponent(light);
@@ -66,9 +67,6 @@ Mesh::Mesh(const QString &filePath)
     Qt3DExtras::QPhongMaterial *material = new Qt3DExtras::QPhongMaterial();
     material->setDiffuse(QColor(254, 254, 254));
 
-    //Qt3DRender::QSceneLoader *sceneLoader = new Qt3DRender::QSceneLoader(entity);
-    //sceneLoader->setSource(QUrl::fromLocalFile(meshFilePath));
-
     // Configuring mesh
     Qt3DRender::QMesh *entityMesh = new Qt3DRender::QMesh;
     //entityMesh->setMeshName("Mesh");
@@ -82,8 +80,8 @@ Mesh::Mesh(const QString &filePath)
     entity->addComponent(objectTransform);
 
     // Setting light
-    Qt3DCore::QEntity *lightEntity = new Qt3DCore::QEntity(rootEntity);
-    Qt3DRender::QPointLight *light = new Qt3DRender::QPointLight(lightEntity);
+    lightEntity = new Qt3DCore::QEntity(rootEntity);
+    light = new Qt3DRender::QPointLight(lightEntity);
     light->setColor("white");
     light->setIntensity(0.8f);
     lightEntity->addComponent(light);
@@ -105,3 +103,15 @@ void Mesh::setFilePath(QString filePath)
     meshFilePath = filePath;
 
 }
+
+//void Mesh::setDiffuse(QColor color)
+//{
+////    Qt3DExtras::QPhongMaterial *material = new Qt3DExtras::QPhongMaterial();
+////    material->setDiffuse(Qt::red);
+////    qDebug() << material->diffuse();
+////    rootEntity->removeComponent(material);
+////    rootEntity->addComponent(material);
+//    //light->setColor("blue");
+
+
+//}

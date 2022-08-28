@@ -204,16 +204,4 @@ void CamController::frameActionTriggered(float dt)
         m_camera->panAboutViewCenter(-0.5 * m_lookSpeed * dt);
     if (m_keyRightPressed)
         m_camera->panAboutViewCenter(0.5 * m_lookSpeed * dt);
-    if (m_wheelInRoll)
-    {
-        m_zoom -= 1;
-        m_camera->setPosition(QVector3D(0, 0, m_zoom));
-
-    }
-    if (m_wheelOutRoll)
-    {
-        m_zoom += 1;
-        m_camera->setPosition(QVector3D(0, 0, m_zoom));
-
-    }
 }

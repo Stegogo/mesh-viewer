@@ -51,3 +51,6 @@ compile_commands.json
 # QtCreator local machine specific files for imported projects
 *creator.user*
 test-meshes/cylinder-head.ply
+test-meshes/model.ply
+test-meshes/model.obj
+test-meshes/model2.ply

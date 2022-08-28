@@ -1,5 +1,4 @@
-QT       += core gui
-QT += 3dcore 3drender 3dinput 3dquick qml quick 3dquickextras
+QT += core gui multimedia 3dcore 3drender 3dinput 3dquick qml quick 3dquickextras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -12,16 +11,18 @@ CONFIG += c++11
 SOURCES += \
     appskeleton.cpp \
     camcontroller.cpp \
-    captionwidget.cpp \
     main.cpp \
     mesh.cpp \
+    section.cpp \
+    sidebar.cpp \
     view3d.cpp
 
 HEADERS += \
     appskeleton.h \
     camcontroller.h \
-    captionwidget.h \
     mesh.h \
+    section.h \
+    sidebar.h \
     view3d.h
 
 FORMS +=

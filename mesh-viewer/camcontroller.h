@@ -28,11 +28,10 @@ class CamController : public Qt3DCore::QEntity
 public:
     CamController(Qt3DCore::QNode *parent = Q_NULLPTR);
 
-    void setCamera(Qt3DRender::QCamera *newCamera);
-
     float lookSpeed() const;
     float linearSpeed() const;
 
+    void setCamera(Qt3DRender::QCamera *newCamera);
     void setLookSpeed(float newLookSpeed);
     void setLinearSpeed(float newLinearSpeed);
 

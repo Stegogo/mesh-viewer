@@ -2,7 +2,7 @@
 #define APPSKELETON_H
 
 #include "mesh.h"
-#include "captionwidget.h"
+#include "sidebar.h"
 
 #include <QApplication>
 #include <QUrl>
@@ -20,17 +20,20 @@ class AppSkeleton : public QMainWindow
 public:
     explicit AppSkeleton(QWidget *parent = nullptr);
     Mesh *mesh;
-    CaptionWidget *captionWidget;
+
+    void setSidebar(Sidebar *newSidebar);
+
 private:
     QPixmap newFilePix;
     QPixmap openFilePix;
     QPixmap quitPix;
 
-    void openFileDialog();
+    Sidebar *sidebar;
 
-    bool event(QEvent *event);
-public slots:
-    void widgetSizeMove();
+    void openFileDialog();
+    void newScene();
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 };
 
 #endif // APPSKELETON_H

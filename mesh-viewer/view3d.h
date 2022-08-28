@@ -7,11 +7,14 @@
 #include <QtCore/QEvent>
 #include <QPainter>
 #include <QWheelEvent>
+#include <Qt3DCore/QTransform>
+#include <QCameraFocus>
 
 //================================================
 // VIEW 3D CLASS
 // Manages events for 3D window, e.g. wheelEvent.
 //================================================
+
 
 class View3D : public Qt3DExtras::Qt3DWindow
 {
@@ -22,11 +25,13 @@ public:
     void setWidget(QWidget *newContainer);
 protected:
     void wheelEvent(QWheelEvent *event);
-    void paintEvent(QPaintEvent *event);
-    void drawLines(QPainter *qp);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 private:
     Qt3DRender::QCamera *m_camera;
     QWidget *m_container;
+    QCameraFocus *focus;
+
 };
 
 #endif // VIEW3D_H

@@ -1,6 +1,8 @@
 #include "appskeleton.h"
 #include "camcontroller.h"
 #include "view3d.h"
+#include "sidebar.h"
+
 
 #include <QApplication>
 #include <QtWidgets/QWidget>
@@ -14,11 +16,16 @@
 #include <Qt3DCore/QTransform>                  // for 3D transform
 #include <Qt3DRender/QMesh>                     // for working with meshes
 #include <Qt3DRender/QCamera>                   // for camera
-#include <Qt3DRender/QPointLight>               // for light
+#include <Qt3DRender/QDirectionalLight>         // for light
 #include <Qt3DExtras/qforwardrenderer.h>        // for FrameGraph
 #include <Qt3DInput/QInputAspect>               // for 3D input
 
-#include <QPushButton>
+
+#include <Qt3DExtras/QText2DEntity>
+
+#include <QSizeGrip>
+
+#include <QSplitter>
 
 int main(int argc, char *argv[])
 {
@@ -28,20 +35,21 @@ int main(int argc, char *argv[])
     // Setting up windows and widgets
     View3D *view = new View3D();
     view->defaultFrameGraph()->setClearColor(QColor(QRgb(0x4d4d4f)));
-
     QWidget *container = QWidget::createWindowContainer(view);
-
     QWidget *widget = new QWidget;
 
+    // Setting up sidebar
+    Sidebar *sidebar = new Sidebar(widget);
+    mw.setSidebar(sidebar);
+
+    // Configuring layouts
     QHBoxLayout *hLayout = new QHBoxLayout(widget);
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setAlignment(Qt::AlignTop);
     hLayout->addWidget(container, 1);
     hLayout->addLayout(vLayout);
     view->setWidget(container);
-
-    QPushButton *add = new QPushButton("button");
-    vLayout->addWidget(add);
+    vLayout->addWidget(sidebar);
 
     // Configuring camera
     Qt3DRender::QCamera *camera = view->camera();
@@ -49,18 +57,24 @@ int main(int argc, char *argv[])
     camera->setPosition(QVector3D(0, 0, 20.0f));
     camera->setViewCenter(QVector3D(0, 0, 0));
 
-    // Setting camera controller
+     // Setting camera controller
     CamController * camController = new CamController(mw.mesh->rootEntity);
     camController->setCamera(camera);
-    view->setCamera(camera);
 
+    // Setting a spliiter for adjusting the sidebar size
+    QSplitter* splitter = new QSplitter(Qt::Horizontal);
+    splitter->addWidget(widget);
+    splitter->addWidget(sidebar);
+
+    // Set the initial sizes for QSplitter widgets
+    splitter->setSizes(QList<int>{500, 200});
+
+    view->setCamera(camera);
     view->setRootEntity(mw.mesh->rootEntity);
     mw.setWindowTitle(QStringLiteral("MeshView"));
-    mw.setCentralWidget(widget);
+    mw.setCentralWidget(splitter);
     mw.show();
     mw.resize(800, 600);
-
-
 
     return a.exec();
 }

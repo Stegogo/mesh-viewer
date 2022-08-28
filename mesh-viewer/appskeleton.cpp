@@ -1,6 +1,5 @@
 ﻿#include "appskeleton.h"
 
-
 #include <QToolBar>
 #include <QIcon>
 #include <QAction>
@@ -12,12 +11,14 @@
 #include <QtCore/QEvent>
 #include <QPainter>
 #include <QTimer>
-
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMimeData>
 
 AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
 {
     mesh = new Mesh();
-    captionWidget = new CaptionWidget(this);
+    sidebar = nullptr;
 
     // Register new images we will use as icons
     newFilePix = QPixmap(":img/icon-new-file.png");
@@ -31,79 +32,68 @@ AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
     QMenu *file;
     file = menuBar()->addMenu("&File");
     file->addAction(quit);
-
     connect(quit, &QAction::triggered, qApp, &QApplication::quit);
 
     // Creating a toolbar
     QToolBar *toolbar = addToolBar("Main toolbar");
 
     // Adding actions for toolbar
-    toolbar->addAction(QIcon(newFilePix),"New File");                               // Add a 'New File' action to toolbar
+    QAction *newTool = toolbar->addAction(QIcon(newFilePix),"New File");            // Add a 'New File' action to toolbar
     QAction *openTool = toolbar->addAction(QIcon(openFilePix), "Open File");        // Add a 'Open File' action to toolbar
     toolbar->addSeparator();                                                        // Separator --------------------
     QAction *quitTool = toolbar->addAction(QIcon(quitPix), "Quit");                 // Add a 'Quit' action to toolbar
 
     // Add shortcuts
+    newTool->setShortcut(tr("CTRL+N"));
     quitTool->setShortcut(tr("CTRL+Q"));
-    openTool->setShortcut(tr("CTRL+O"));
+    openTool->setShortcut(tr("CTRL+O"));\
 
+    connect(newTool, &QAction::triggered, this, &AppSkeleton::newScene);
     connect(openTool, &QAction::triggered, this, &AppSkeleton::openFileDialog);
     connect(quitTool, &QAction::triggered, qApp, &QApplication::quit);
+
+    setAcceptDrops(true);
 }
 
-void AppSkeleton::widgetSizeMove()
+void AppSkeleton::setSidebar(Sidebar *newSidebar)
 {
-    if (captionWidget->width() <= this->width() && captionWidget->height() <= this->height())
-    {
-        captionWidget->setWindowOpacity(1); // Show the widget
-        QPoint p = this->mapToGlobal(this->pos());
-        int x = p.x() + (this->width() - captionWidget->width()) / 2;
-        int y = p.y() + (this->height() - captionWidget->height()) / 2;
-        captionWidget->move(x, y);
-        captionWidget->raise();
-    }
-    else
-    {
-        captionWidget->setWindowOpacity(0); // Hide the widget
-    }
-}
+    sidebar = newSidebar;
+    sidebar->setMesh(mesh);
 
-bool AppSkeleton::event(QEvent *event)
-{
-    switch (event->type())
-    {
-    case QEvent::Show:
-        captionWidget->show();
-        QTimer::singleShot(50, this, SLOT(widgetSizeMove()));
-        //Wait until the Main Window be shown
-        break;
-    case QEvent::WindowActivate:
-    case QEvent::Resize:
-    case QEvent::Move:
-        widgetSizeMove();
-        break;
-    default:
-        break;
-    }
-
-    return QMainWindow::event(event);
+    // Log action into the sidebar QList
+    sidebar->logger->addItem("Loaded file: " + mesh->getFilePath());
 }
 
 void AppSkeleton::openFileDialog()
 {
-    qDebug() << mesh->getFilePath();
     QString filePath = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::homePath(),("*.ply"));
-    mesh->setFilePath(filePath);
+    mesh->meshEntity->setSource(QUrl::fromLocalFile(filePath));
 
-    //====================DANGER ZONE=================
-    // It does not actually delete the model and
-    // does not help displaying next
-    mesh = nullptr;
-    //mesh = new Mesh(filePath);
-    //qDebug() << mesh->getFilePath();
-    //================================================
-
-    this->repaint();
-    qApp->processEvents();
+    // Log action into the sidebar QList
+    sidebar->logger->addItem("Loaded file: " + filePath);
 }
 
+void AppSkeleton::newScene()
+{
+    mesh->meshEntity->setGeometry(nullptr);
+    sidebar->logger->addItem("Loaded new scene");
+}
+
+
+void AppSkeleton::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls())
+        event->acceptProposedAction();
+}
+
+void AppSkeleton::dropEvent(QDropEvent *event)
+{
+    foreach (const QUrl &url, event->mimeData()->urls())
+    {
+        QString filePath = url.toLocalFile();
+
+        // Log action into the sidebar QList
+        sidebar->logger->addItem("Dropped file: " + filePath);
+        mesh->meshEntity->setSource(QUrl::fromLocalFile(filePath));
+    }
+}
