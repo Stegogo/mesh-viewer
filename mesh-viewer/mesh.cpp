@@ -62,20 +62,20 @@ void Mesh::setLight(Qt3DRender::QPointLight *newLight)
 }
 
 
-//static const QColor ambientColor("#576675");  // Shader input
-//static const QColor diffuseColor("#5F6E7D");  // Shader input
-//static const QColor SpecularColor("#61707F"); // Shader input
-//static const float shininess(0.5);            // Shader input
+static const QColor ambientColor("#576675");  // Shader input
+static const QColor diffuseColor("#5F6E7D");  // Shader input
+static const QColor SpecularColor("#61707F"); // Shader input
+static const float shininess(0.5);            // Shader input
 
-//void Mesh::addMaterial(Qt3DCore::QEntity *entity)
-//{
-//    qDebug() << "!!";
-//    Qt3DRender::QMaterial * material = new Qt3DRender::QMaterial();
-//    material->setEffect(new CustomEffect());
-//    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("ka"), ambientColor));
-//    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("kd"), diffuseColor));
-//    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("ks"), SpecularColor));
-//    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("shininess"), shininess));
-//    entity->addComponent(material);
-//}
+void Mesh::addMaterial(Qt3DCore::QEntity *entity)
+{
+    qDebug() << "!!";
+    Qt3DRender::QMaterial * material = new Qt3DRender::QMaterial();
+    material->setEffect(new CustomEffect());
+    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("ka"), ambientColor));
+    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("kd"), diffuseColor));
+    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("ks"), SpecularColor));
+    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("shininess"), shininess));
+    entity->addComponent(material);
+}
 

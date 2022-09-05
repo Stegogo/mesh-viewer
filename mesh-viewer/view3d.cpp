@@ -14,9 +14,6 @@ View3D::View3D()
     lightEntity = nullptr;
     light = nullptr;
 
-    installEventFilter(this);
-
-
 }
 void View3D::setCamera(Qt3DRender::QCamera *newCamera)
 {
@@ -33,9 +30,8 @@ void View3D::setCamera(Qt3DRender::QCamera *newCamera)
 
     mesh->setLight(light);
     m_camera->viewAll();
-    //m_camera->viewEntity((Qt3DCore::QEntity *)getMesh()->meshEntity);
-    //connect(mesh->meshEntity, &Qt3DRender::QMesh::statusChanged, this, &View3D::resetFOV);
-    connect(mesh->meshEntity, &Qt3DRender::QMesh::sourceChanged, this, &View3D::resetFOV);
+
+    //connect(mesh->meshEntity, &Qt3DRender::QMesh::sourceChanged, this, &View3D::resetFOV);
 
 }
 

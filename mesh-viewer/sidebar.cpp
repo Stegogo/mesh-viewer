@@ -84,6 +84,9 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     setLayout(m_layout);
 
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+
+
+
 }
 
 const QColor &Sidebar::getLightColor() const
@@ -153,6 +156,22 @@ void Sidebar::pickColor()
         return;
 }
 
+void Sidebar::logMeshStatus()
+{
+   //logger->addItem(mesh->meshEntity->status());
+
+//    if (mesh->meshEntity->status() == Qt3DRender::QMesh::Ready)
+//        logger->addItem("Mesh status: READY");
+//    else if (mesh->meshEntity->status() == Qt3DRender::QMesh::None)
+//        logger->addItem("Mesh status: NONE");
+//    else if (mesh->meshEntity->status() == Qt3DRender::QMesh::Loading)
+//        logger->addItem("Mesh status: LOADING");
+//    else
+//        logger->addItem("Mesh status: ERROR");
+
+
+}
+
 Mesh *Sidebar::getMesh() const
 {
     return mesh;
@@ -161,6 +180,7 @@ Mesh *Sidebar::getMesh() const
 void Sidebar::setMesh(Mesh *newMesh)
 {
     mesh = newMesh;
+//    connect(mesh->meshEntity, &Qt3DRender::QMesh::sourceChanged, this, &Sidebar::logMeshStatus);
 }
 
 

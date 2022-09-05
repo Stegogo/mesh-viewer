@@ -9,6 +9,7 @@ CustomEffect::CustomEffect(Qt3DCore::QNode *parent)
     : Qt3DRender::QEffect(parent)
 {
 
+
     Qt3DRender::QTechnique *techniqueES20 = new Qt3DRender::QTechnique();
     techniqueES20->graphicsApiFilter()->setProfile(Qt3DRender::QGraphicsApiFilter::NoProfile);
     techniqueES20->graphicsApiFilter()->setApi(Qt3DRender::QGraphicsApiFilter::OpenGLES);

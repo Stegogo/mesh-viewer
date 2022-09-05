@@ -35,8 +35,8 @@ public:
 
 private slots:
     void pickColor();
+    void logMeshStatus();
 private:
-    //QVBoxLayout *m_layout;
     QVBoxLayout *m_layout;
 
     QColor lightColor;

@@ -62,7 +62,7 @@ void AppSkeleton::setSidebar(Sidebar *newSidebar)
     sidebar->setMesh(view->getMesh());
 
     // Log action into the sidebar QList
-    sidebar->logger->addItem("Loaded file: " + view->getMesh()->getFilePath());
+    sidebar->logger->addItem("Loaded new scene");
 }
 
 void AppSkeleton::setView(View3D *newView)
@@ -109,11 +109,16 @@ void AppSkeleton::dropEvent(QDropEvent *event)
     {
         QString filePath = url.toLocalFile();
 
-        view->getMesh()->meshEntity->setSource(QUrl::fromLocalFile(filePath));
-        view->getCamera()->viewEntity((Qt3DCore::QEntity *)view->getMesh()->meshEntity);
-//        view->getCamera()->viewAll();
-        sidebar->logger->addItem("Dropped file: " + filePath);
-
+        if ((filePath.endsWith(".ply",Qt::CaseSensitive)) || (filePath.endsWith(".obj",Qt::CaseSensitive)))
+        {
+            view->getMesh()->meshEntity->setSource(QUrl::fromLocalFile(filePath));
+            view->getCamera()->viewEntity((Qt3DCore::QEntity *)view->getMesh()->meshEntity);
+            sidebar->logger->addItem("Dropped file: " + filePath);
+        }
+        else
+        {
+           sidebar->logger->addItem("ERROR: Failed opening file");
+        }
         // Log action into the sidebar QList
 //        if (view->getMesh()->meshEntity->status() == Qt3DRender::QMesh::Ready)
 //            sidebar->logger->addItem("Dropped file: " + filePath);
