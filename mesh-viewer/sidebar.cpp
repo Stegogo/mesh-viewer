@@ -153,6 +153,11 @@ void Sidebar::pickColor()
         return;
 }
 
+Mesh *Sidebar::getMesh() const
+{
+    return mesh;
+}
+
 void Sidebar::setMesh(Mesh *newMesh)
 {
     mesh = newMesh;

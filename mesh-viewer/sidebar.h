@@ -31,6 +31,8 @@ public:
 
     void setMesh(Mesh *newMesh);
 
+    Mesh *getMesh() const;
+
 private slots:
     void pickColor();
 private:

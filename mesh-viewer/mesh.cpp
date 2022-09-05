@@ -1,5 +1,5 @@
 #include "mesh.h"
-
+#include "customeffect.h"
 #include <QUrl>                                 // for working with URLs
 #include <Qt3DExtras/Qt3DWindow>                // for 3D view
 #include <Qt3DExtras/QPhongMaterial>            // for material
@@ -12,8 +12,8 @@
 #include <Qt3DRender/QSceneLoader>
 #include <Qt3DRender/QAttribute>
 #include <QApplication>
-
-
+#include <Qt3DRender/QParameter>
+#include <Qt3DRender/QEffect>
 
 Mesh::Mesh()
 {
@@ -24,74 +24,27 @@ Mesh::Mesh()
     rootEntity = new Qt3DCore::QEntity;
     Qt3DCore::QEntity *entity = new Qt3DCore::QEntity(rootEntity);
 
-    //Qt3DRender::QSceneLoader *sceneLoader = new Qt3DRender::QSceneLoader(entity);
-    //sceneLoader->setSource(QUrl::fromLocalFile(meshFilePath));
-
     // Setting material
     material = new Qt3DExtras::QPhongMaterial();
     material->setDiffuse(QColor(254, 254, 254));
 
     // Configuring mesh
     meshEntity = new Qt3DRender::QMesh;
-    meshEntity->setSource(QUrl::fromLocalFile(meshFilePath));
+    //meshEntity->setSource(QUrl::fromLocalFile(meshFilePath));
+    meshEntity->setGeometry(nullptr);
     entity->addComponent(meshEntity);
     entity->addComponent(material);
+    //addMaterial(entity);
+    //entity->addComponent(material);
 
     Qt3DCore::QTransform *objectTransform = new Qt3DCore::QTransform(entity);
     entity->addComponent(objectTransform);
 
-    // Setting light
-    lightEntity = new Qt3DCore::QEntity(rootEntity);
-    light = new Qt3DRender::QPointLight(lightEntity);
-    light->setColor("white");
-    light->setIntensity(0.8f);
-    lightEntity->addComponent(light);
-    Qt3DCore::QTransform *lightTransform = new Qt3DCore::QTransform(lightEntity);
-    lightTransform->setTranslation(QVector3D(0, 0, 40.0f));
-    lightEntity->addComponent(lightTransform);
-
-    //entity->removeComponent(entityMesh);
+    lightEntity = nullptr;
+    light = nullptr;
 
     qApp->processEvents();
 }
-
-Mesh::Mesh(const QString &filePath)
-{
-    meshFilePath = filePath;
-
-    // Setting 3D entities
-    rootEntity = new Qt3DCore::QEntity;
-    Qt3DCore::QEntity *entity = new Qt3DCore::QEntity(rootEntity);
-
-    // Setting material
-    Qt3DExtras::QPhongMaterial *material = new Qt3DExtras::QPhongMaterial();
-    material->setDiffuse(QColor(254, 254, 254));
-
-    // Configuring mesh
-    Qt3DRender::QMesh *entityMesh = new Qt3DRender::QMesh;
-    //entityMesh->setMeshName("Mesh");
-    entityMesh->setSource(QUrl::fromLocalFile(meshFilePath));
-    entity->addComponent(entityMesh);
-    entity->addComponent(material);
-
-    qDebug() << entityMesh->source();
-
-    Qt3DCore::QTransform *objectTransform = new Qt3DCore::QTransform(entity);
-    entity->addComponent(objectTransform);
-
-    // Setting light
-    lightEntity = new Qt3DCore::QEntity(rootEntity);
-    light = new Qt3DRender::QPointLight(lightEntity);
-    light->setColor("white");
-    light->setIntensity(0.8f);
-    lightEntity->addComponent(light);
-    Qt3DCore::QTransform *lightTransform = new Qt3DCore::QTransform(lightEntity);
-    lightTransform->setTranslation(QVector3D(0, 0, 40.0f));
-    lightEntity->addComponent(lightTransform);
-
-    qApp->processEvents();
-}
-
 
 QString Mesh::getFilePath()
 {
@@ -103,15 +56,26 @@ void Mesh::setFilePath(QString filePath)
     meshFilePath = filePath;
 
 }
+void Mesh::setLight(Qt3DRender::QPointLight *newLight)
+{
+    light = newLight;
+}
 
-//void Mesh::setDiffuse(QColor color)
+
+//static const QColor ambientColor("#576675");  // Shader input
+//static const QColor diffuseColor("#5F6E7D");  // Shader input
+//static const QColor SpecularColor("#61707F"); // Shader input
+//static const float shininess(0.5);            // Shader input
+
+//void Mesh::addMaterial(Qt3DCore::QEntity *entity)
 //{
-////    Qt3DExtras::QPhongMaterial *material = new Qt3DExtras::QPhongMaterial();
-////    material->setDiffuse(Qt::red);
-////    qDebug() << material->diffuse();
-////    rootEntity->removeComponent(material);
-////    rootEntity->addComponent(material);
-//    //light->setColor("blue");
-
-
+//    qDebug() << "!!";
+//    Qt3DRender::QMaterial * material = new Qt3DRender::QMaterial();
+//    material->setEffect(new CustomEffect());
+//    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("ka"), ambientColor));
+//    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("kd"), diffuseColor));
+//    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("ks"), SpecularColor));
+//    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("shininess"), shininess));
+//    entity->addComponent(material);
 //}
+

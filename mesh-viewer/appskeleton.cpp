@@ -14,10 +14,11 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMimeData>
+#include <Qt3DRender/QCamera>
 
 AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
 {
-    mesh = new Mesh();
+    view = nullptr;
     sidebar = nullptr;
 
     // Register new images we will use as icons
@@ -58,24 +59,40 @@ AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
 void AppSkeleton::setSidebar(Sidebar *newSidebar)
 {
     sidebar = newSidebar;
-    sidebar->setMesh(mesh);
+    sidebar->setMesh(view->getMesh());
 
     // Log action into the sidebar QList
-    sidebar->logger->addItem("Loaded file: " + mesh->getFilePath());
+    sidebar->logger->addItem("Loaded file: " + view->getMesh()->getFilePath());
+}
+
+void AppSkeleton::setView(View3D *newView)
+{
+    view = newView;
+
 }
 
 void AppSkeleton::openFileDialog()
 {
     QString filePath = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::homePath(),("*.ply"));
-    mesh->meshEntity->setSource(QUrl::fromLocalFile(filePath));
+
+    view->getMesh()->meshEntity->setSource(QUrl::fromLocalFile(filePath));
+    view->getCamera()->viewEntity((Qt3DCore::QEntity *)view->getMesh()->meshEntity);
+
 
     // Log action into the sidebar QList
     sidebar->logger->addItem("Loaded file: " + filePath);
+//    if (view->getMesh()->meshEntity->status() == Qt3DRender::QMesh::Ready)
+//        sidebar->logger->addItem("Loaded file: " + filePath);
+//    else if (view->getMesh()->meshEntity->status() == Qt3DRender::QMesh::Error)
+//        sidebar->logger->addItem("ERROR: Failed to load mesh");
+//    else if (view->getMesh()->meshEntity->status() == Qt3DRender::QMesh::None)
+//        sidebar->logger->addItem("Nothing to load");
+
 }
 
 void AppSkeleton::newScene()
 {
-    mesh->meshEntity->setGeometry(nullptr);
+    view->getMesh()->meshEntity->setGeometry(nullptr);
     sidebar->logger->addItem("Loaded new scene");
 }
 
@@ -92,8 +109,20 @@ void AppSkeleton::dropEvent(QDropEvent *event)
     {
         QString filePath = url.toLocalFile();
 
-        // Log action into the sidebar QList
+        view->getMesh()->meshEntity->setSource(QUrl::fromLocalFile(filePath));
+        view->getCamera()->viewEntity((Qt3DCore::QEntity *)view->getMesh()->meshEntity);
+//        view->getCamera()->viewAll();
         sidebar->logger->addItem("Dropped file: " + filePath);
-        mesh->meshEntity->setSource(QUrl::fromLocalFile(filePath));
+
+        // Log action into the sidebar QList
+//        if (view->getMesh()->meshEntity->status() == Qt3DRender::QMesh::Ready)
+//            sidebar->logger->addItem("Dropped file: " + filePath);
+//        else if (view->getMesh()->meshEntity->status() == Qt3DRender::QMesh::Error)
+//            sidebar->logger->addItem("ERROR: Failed to load mesh");
+//        else if (view->getMesh()->meshEntity->status() == Qt3DRender::QMesh::None)
+//            sidebar->logger->addItem("Nothing to load");
+
+
+
     }
 }

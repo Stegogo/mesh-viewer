@@ -1,9 +1,8 @@
 #ifndef APPSKELETON_H
 #define APPSKELETON_H
 
-#include "mesh.h"
 #include "sidebar.h"
-
+#include "view3d.h"
 #include <QApplication>
 #include <QUrl>
 #include <QMainWindow>
@@ -19,15 +18,16 @@ class AppSkeleton : public QMainWindow
     Q_OBJECT
 public:
     explicit AppSkeleton(QWidget *parent = nullptr);
-    Mesh *mesh;
-
     void setSidebar(Sidebar *newSidebar);
+
+    void setView(View3D *newView);
 
 private:
     QPixmap newFilePix;
     QPixmap openFilePix;
     QPixmap quitPix;
 
+    View3D *view;
     Sidebar *sidebar;
 
     void openFileDialog();

@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     appskeleton.cpp \
     camcontroller.cpp \
+    customeffect.cpp \
     main.cpp \
     mesh.cpp \
     section.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 HEADERS += \
     appskeleton.h \
     camcontroller.h \
+    customeffect.h \
     mesh.h \
     section.h \
     sidebar.h \
@@ -33,6 +35,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    img/img.qrc
+    img/img.qrc \
+    img/shaders.qrc
 
 DISTFILES +=

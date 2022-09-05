@@ -132,11 +132,13 @@ CamController::CamController(Qt3DCore::QNode *parent)
     connect(m_xAxis, SIGNAL(valueChanged(float)), this, SLOT(axisValueChanged(float)));
     connect(m_yAxis, SIGNAL(valueChanged(float)), this, SLOT(axisValueChanged(float)));
     connect(m_frameAction, SIGNAL(triggered(float)), this, SLOT(frameActionTriggered(float)));
+
 }
 
 void CamController::setCamera(Qt3DRender::QCamera *newCamera)
 {
     m_camera = newCamera;
+
 }
 
 float CamController::linearSpeed() const

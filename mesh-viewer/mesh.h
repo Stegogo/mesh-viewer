@@ -17,7 +17,6 @@ class Mesh
 {
 public:
     Mesh();
-    Mesh(const QString &filePath);
     Qt3DCore::QEntity *rootEntity;
     Qt3DRender::QMesh *meshEntity;
     Qt3DCore::QEntity *lightEntity;
@@ -26,9 +25,12 @@ public:
 
     QString getFilePath();
     void setFilePath(QString filePath);
+    void setLight(Qt3DRender::QPointLight *newLight);
+
 private:
     QString meshFilePath;
 
+    void addMaterial(Qt3DCore::QEntity *entity);
 };
 
 #endif // MESH_H

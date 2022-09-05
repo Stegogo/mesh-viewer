@@ -18,14 +18,9 @@
 #include <Qt3DRender/QCamera>                   // for camera
 #include <Qt3DRender/QDirectionalLight>         // for light
 #include <Qt3DExtras/qforwardrenderer.h>        // for FrameGraph
-#include <Qt3DInput/QInputAspect>               // for 3D input
-
-
-#include <Qt3DExtras/QText2DEntity>
-
-#include <QSizeGrip>
-
-#include <QSplitter>
+#include <Qt3DInput/QInputAspect>               // for 3D input                 
+#include <QSplitter>                            // for sidebar splitter
+#include <QSizeGrip>                            // for resizing the sidebar
 
 int main(int argc, char *argv[])
 {
@@ -34,6 +29,7 @@ int main(int argc, char *argv[])
 
     // Setting up windows and widgets
     View3D *view = new View3D();
+    mw.setView(view);
     view->defaultFrameGraph()->setClearColor(QColor(QRgb(0x4d4d4f)));
     QWidget *container = QWidget::createWindowContainer(view);
     QWidget *widget = new QWidget;
@@ -41,6 +37,7 @@ int main(int argc, char *argv[])
     // Setting up sidebar
     Sidebar *sidebar = new Sidebar(widget);
     mw.setSidebar(sidebar);
+    sidebar->setMesh(view->getMesh());
 
     // Configuring layouts
     QHBoxLayout *hLayout = new QHBoxLayout(widget);
@@ -54,27 +51,34 @@ int main(int argc, char *argv[])
     // Configuring camera
     Qt3DRender::QCamera *camera = view->camera();
     camera->lens()->setPerspectiveProjection(40.0f, 16.0f/9.0f, 0.1f, 1000.0f);
-    camera->setPosition(QVector3D(0, 0, 20.0f));
+    camera->setPosition(QVector3D(0, 0, 400.0f));
     camera->setViewCenter(QVector3D(0, 0, 0));
 
      // Setting camera controller
-    CamController * camController = new CamController(mw.mesh->rootEntity);
+    CamController * camController = new CamController(view->getMesh()->rootEntity);
     camController->setCamera(camera);
+
 
     // Setting a spliiter for adjusting the sidebar size
     QSplitter* splitter = new QSplitter(Qt::Horizontal);
     splitter->addWidget(widget);
     splitter->addWidget(sidebar);
 
+
     // Set the initial sizes for QSplitter widgets
     splitter->setSizes(QList<int>{500, 200});
 
     view->setCamera(camera);
-    view->setRootEntity(mw.mesh->rootEntity);
+    view->setRootEntity(view->getMesh()->rootEntity);
+
+    camera->viewEntity(view->getMesh()->rootEntity);
+    camera->viewAll();
+
     mw.setWindowTitle(QStringLiteral("MeshView"));
     mw.setCentralWidget(splitter);
     mw.show();
     mw.resize(800, 600);
+
 
     return a.exec();
 }
