@@ -1,4 +1,4 @@
-QT += core gui multimedia 3dcore 3drender 3dinput 3dquick qml quick 3dquickextras datavisualization
+QT += core gui multimedia 3dcore 3drender 3dinput 3dquick qml quick 3dquickextras datavisualization opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

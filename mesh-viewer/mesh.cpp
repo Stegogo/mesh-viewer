@@ -17,10 +17,12 @@
 #include <QSlider>
 
 #include <Qt3DRender/QEffect>
+#include <Qt3DRender/QMaterial>
 #include <Qt3DRender/QTechnique>
 #include <Qt3DRender/QGraphicsApiFilter>
 #include <QtCore/QUrl>
 #include <Qt3DRender/QShaderProgram>
+#include <QMaterial>
 
 Mesh::Mesh()
 {
@@ -37,15 +39,66 @@ Mesh::Mesh()
 
     // Configuring mesh
     meshEntity = new Qt3DRender::QMesh;
-    //meshEntity->setSource(QUrl::fromLocalFile(meshFilePath));
-    meshEntity->setGeometry(nullptr);
-    entity->addComponent(meshEntity);
-    entity->addComponent(material);
-    //addMaterial(entity);
+    meshEntity->setSource(QUrl::fromLocalFile(meshFilePath));
+    //meshEntity->setGeometry(nullptr);
+    rootEntity->addComponent(meshEntity);
+    //entity->addComponent(meshEntity);
+    rootEntity->addComponent(material);
+    //entity->addComponent(material);
+    //addMaterial(rootEntity);
     //entity->addComponent(material);
 
+    //!-----------------------DANGER ZONE---------------------------
+    //!-----------------------DANGER ZONE---------------------------
+
+//    Qt3DRender::QMaterial *material1 = new Qt3DRender::QMaterial();
+//    Qt3DRender::QMaterial *material2 = new Qt3DRender::QMaterial();
+
+//    // Create effect, technique, render pass and shader
+//    Qt3DRender::QEffect *effect = new Qt3DRender::QEffect();
+//    Qt3DRender::QTechnique *gl3Technique = new Qt3DRender::QTechnique();
+//    Qt3DRender::QRenderPass *gl3Pass = new Qt3DRender::QRenderPass();
+//    Qt3DRender::QShaderProgram *glShader = new Qt3DRender::QShaderProgram();
+
+//    // Set the shader on the render pass
+//    glShader->setVertexShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/custom-shader.vert"))));
+//    glShader->setFragmentShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/custom-shader.frag"))));
+//    gl3Pass->setShaderProgram(glShader);
+
+//    // Add the pass to the technique
+//    gl3Technique->addRenderPass(gl3Pass);
+
+//    // Set the targeted GL version for the technique
+//    gl3Technique->graphicsApiFilter()->setApi(Qt3DRender::QGraphicsApiFilter::OpenGL);
+//    gl3Technique->graphicsApiFilter()->setMajorVersion(3);
+//    gl3Technique->graphicsApiFilter()->setMinorVersion(1);
+//    gl3Technique->graphicsApiFilter()->setProfile(Qt3DRender::QGraphicsApiFilter::CoreProfile);
+
+//    // Add the technique to the effect
+//    effect->addTechnique(gl3Technique);
+
+//    // Set the effect on the materials
+//    material1->setEffect(effect);
+//    material2->setEffect(effect);
+
+//    // Set different parameters on the materials
+//    const QString parameterName = QStringLiteral("color");
+//    material1->addParameter(new Qt3DRender::QParameter(parameterName, QColor::fromRgbF(0.0f, 1.0f, 0.0f, 1.0f)));
+//    material2->addParameter(new Qt3DRender::QParameter(parameterName, QColor::fromRgbF(1.0f, 1.0f, 1.0f, 1.0f)));
+
+//    rootEntity->addComponent(material1);
+//    //rootEntity->addComponent(material2);
+//    entity->addComponent(material1);
+//    //entity->addComponent(material2);
+
+    //!-----------------------DANGER ZONE---------------------------
+    //!-----------------------DANGER ZONE---------------------------
+
     Qt3DCore::QTransform *objectTransform = new Qt3DCore::QTransform(entity);
-    entity->addComponent(objectTransform);
+    rootEntity->addComponent(objectTransform);
+
+    qDebug() << rootEntity->components();
+
 
     lightEntity = nullptr;
     light = nullptr;
@@ -69,47 +122,25 @@ void Mesh::setLight(Qt3DRender::QPointLight *newLight)
 }
 
 
-static const QColor ambientColor("#576675");  // Shader input
-static const QColor diffuseColor("#5F6E7D");  // Shader input
-static const QColor SpecularColor("#61707F"); // Shader input
-static const float shininess(0.5);            // Shader input
 
 void Mesh::addMaterial(Qt3DCore::QEntity *entity)
 {
-    qDebug() << "!!";
+    qDebug() << "material!!";
+
+    QColor ambientColor(25, 25, 25);  // Shader input
+    QColor diffuseColor(25, 25, 25);  // Shader input
+    QColor SpecularColor(25, 25, 25); // Shader input
+    float shininess(0.0);            // Shader input
+
+//    Qt3DRender::QMaterial * material = new Qt3DRender::QMaterial();
     Qt3DRender::QMaterial * material = new Qt3DRender::QMaterial();
-
-    Qt3DRender::QEffect *effect = new Qt3DRender::QEffect();
-
-    // Create technique, render pass and shader
-    Qt3DRender::QTechnique *gl3Technique = new Qt3DRender::QTechnique();
-    Qt3DRender::QRenderPass *gl3Pass = new Qt3DRender::QRenderPass();
-    Qt3DRender::QShaderProgram *glShader = new Qt3DRender::QShaderProgram();
-
-    glShader->setVertexShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/custom-shader.vert"))));
-    glShader->setFragmentShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/custom-shader.frag"))));
-
-    // Set the shader on the render pass
-    gl3Pass->setShaderProgram(glShader);
-
-    // Add the pass to the technique
-    gl3Technique->addRenderPass(gl3Pass);
-
-    // Set the targeted GL version for the technique
-    gl3Technique->graphicsApiFilter()->setApi(Qt3DRender::QGraphicsApiFilter::OpenGL);
-    gl3Technique->graphicsApiFilter()->setMajorVersion(3);
-    gl3Technique->graphicsApiFilter()->setMinorVersion(1);
-    gl3Technique->graphicsApiFilter()->setProfile(Qt3DRender::QGraphicsApiFilter::CoreProfile);
-
-
-    // Add the technique to the effect
-    effect->addTechnique(gl3Technique);
-
-    material->setEffect(effect);
+//    material->setEffect(new CustomEffect());
     material->addParameter(new Qt3DRender::QParameter(QStringLiteral("ka"), ambientColor));
     material->addParameter(new Qt3DRender::QParameter(QStringLiteral("kd"), diffuseColor));
     material->addParameter(new Qt3DRender::QParameter(QStringLiteral("ks"), SpecularColor));
     material->addParameter(new Qt3DRender::QParameter(QStringLiteral("shininess"), shininess));
+
+
+    //material->setDiffuse(QColor(25, 25, 25));
     entity->addComponent(material);
 }
-

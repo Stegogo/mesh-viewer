@@ -93,6 +93,8 @@ void AppSkeleton::newScene()
 {
     view->getMesh()->meshEntity->setGeometry(nullptr);
     sidebar->logger->addItem("Loaded new scene");
+
+
 }
 
 void AppSkeleton::dragEnterEvent(QDragEnterEvent *event)
@@ -111,6 +113,18 @@ void AppSkeleton::dropEvent(QDropEvent *event)
         {
             view->getMesh()->meshEntity->setSource(QUrl::fromLocalFile(filePath));
             view->getCamera()->viewEntity((Qt3DCore::QEntity *)view->getMesh()->meshEntity);
+
+            //!-------------------DANGER ZONE-------------------
+            //!-------------------DANGER ZONE-------------------
+
+            qDebug() << view->getMesh()->meshEntity->status();
+
+            view->getMesh()->addMaterial(view->getMesh()->rootEntity);
+
+
+            //!-------------------DANGER ZONE-------------------
+            //!-------------------DANGER ZONE-------------------
+
             // Log action into the sidebar QList
             sidebar->logger->addItem("Dropped file: " + filePath);
         }

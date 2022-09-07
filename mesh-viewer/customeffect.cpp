@@ -9,7 +9,7 @@ CustomEffect::CustomEffect(Qt3DCore::QNode *parent)
     : Qt3DRender::QEffect(parent)
 {
 
-
+    qDebug() << "effect!!";
     Qt3DRender::QTechnique *techniqueES20 = new Qt3DRender::QTechnique();
     techniqueES20->graphicsApiFilter()->setProfile(Qt3DRender::QGraphicsApiFilter::NoProfile);
     techniqueES20->graphicsApiFilter()->setApi(Qt3DRender::QGraphicsApiFilter::OpenGLES);
@@ -19,8 +19,8 @@ CustomEffect::CustomEffect(Qt3DCore::QNode *parent)
     Qt3DRender::QTechnique *techniqueGL31 = new Qt3DRender::QTechnique();
     techniqueGL31->graphicsApiFilter()->setProfile(Qt3DRender::QGraphicsApiFilter::CoreProfile);
     techniqueGL31->graphicsApiFilter()->setApi(Qt3DRender::QGraphicsApiFilter::OpenGL);
-    techniqueGL31->graphicsApiFilter()->setMajorVersion(3);
-    techniqueGL31->graphicsApiFilter()->setMinorVersion(1);
+    techniqueGL31->graphicsApiFilter()->setMajorVersion(4);
+    techniqueGL31->graphicsApiFilter()->setMinorVersion(6);
 
     Qt3DRender::QFilterKey *filterkey = new Qt3DRender::QFilterKey(this);
     filterkey->setName(QStringLiteral("renderingStyle"));

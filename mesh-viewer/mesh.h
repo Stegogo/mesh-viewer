@@ -26,11 +26,12 @@ public:
     QString getFilePath();
     void setFilePath(QString filePath);
     void setLight(Qt3DRender::QPointLight *newLight);
+    void addMaterial(Qt3DCore::QEntity *entity);
 
 private:
     QString meshFilePath;
 
-    void addMaterial(Qt3DCore::QEntity *entity);
+
 };
 
 #endif // MESH_H
