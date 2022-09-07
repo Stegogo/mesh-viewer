@@ -14,6 +14,13 @@
 #include <QApplication>
 #include <Qt3DRender/QParameter>
 #include <Qt3DRender/QEffect>
+#include <QSlider>
+
+#include <Qt3DRender/QEffect>
+#include <Qt3DRender/QTechnique>
+#include <Qt3DRender/QGraphicsApiFilter>
+#include <QtCore/QUrl>
+#include <Qt3DRender/QShaderProgram>
 
 Mesh::Mesh()
 {
@@ -71,7 +78,34 @@ void Mesh::addMaterial(Qt3DCore::QEntity *entity)
 {
     qDebug() << "!!";
     Qt3DRender::QMaterial * material = new Qt3DRender::QMaterial();
-    material->setEffect(new CustomEffect());
+
+    Qt3DRender::QEffect *effect = new Qt3DRender::QEffect();
+
+    // Create technique, render pass and shader
+    Qt3DRender::QTechnique *gl3Technique = new Qt3DRender::QTechnique();
+    Qt3DRender::QRenderPass *gl3Pass = new Qt3DRender::QRenderPass();
+    Qt3DRender::QShaderProgram *glShader = new Qt3DRender::QShaderProgram();
+
+    glShader->setVertexShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/custom-shader.vert"))));
+    glShader->setFragmentShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/custom-shader.frag"))));
+
+    // Set the shader on the render pass
+    gl3Pass->setShaderProgram(glShader);
+
+    // Add the pass to the technique
+    gl3Technique->addRenderPass(gl3Pass);
+
+    // Set the targeted GL version for the technique
+    gl3Technique->graphicsApiFilter()->setApi(Qt3DRender::QGraphicsApiFilter::OpenGL);
+    gl3Technique->graphicsApiFilter()->setMajorVersion(3);
+    gl3Technique->graphicsApiFilter()->setMinorVersion(1);
+    gl3Technique->graphicsApiFilter()->setProfile(Qt3DRender::QGraphicsApiFilter::CoreProfile);
+
+
+    // Add the technique to the effect
+    effect->addTechnique(gl3Technique);
+
+    material->setEffect(effect);
     material->addParameter(new Qt3DRender::QParameter(QStringLiteral("ka"), ambientColor));
     material->addParameter(new Qt3DRender::QParameter(QStringLiteral("kd"), diffuseColor));
     material->addParameter(new Qt3DRender::QParameter(QStringLiteral("ks"), SpecularColor));

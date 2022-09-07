@@ -1,12 +1,22 @@
-attribute vec3 position;
-attribute vec3 normal;
-uniform mat4 projection, modelview, normalMat;
-varying vec3 normalInterp;
-varying vec3 vertPos;
+#version 330 core
 
-void main(){
-  vec4 vertPos4 = modelview * vec4(position, 1.0);
-  vertPos = vec3(vertPos4) / vertPos4.w;
-  normalInterp = vec3(normalMat * vec4(normal, 0.0));
-  gl_Position = projection * vertPos4;
+in vec3 vertexPosition;
+in vec3 vertexNormal;
+
+out EyeSpaceVertex {
+    vec3 position;
+    vec3 normal;
+} vs_out;
+
+uniform mat4 modelView;
+uniform mat3 modelViewNormal;
+uniform mat4 mvp;
+
+void main()
+{
+    vs_out.normal = normalize( modelViewNormal * vertexNormal );
+    vs_out.position = vec3( modelView * vec4( vertexPosition, 1.0 ) );
+
+    gl_Position = mvp * vec4( vertexPosition, 1.0 );
 }
+

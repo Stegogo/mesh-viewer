@@ -73,20 +73,19 @@ void AppSkeleton::setView(View3D *newView)
 
 void AppSkeleton::openFileDialog()
 {
-    QString filePath = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::homePath(),("*.ply"));
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::homePath(), tr("All known formats(*.ply *.obj *.stl);;.ply(*.ply);;.obj(*.obj);; Binary STL(*.stl)"));
 
-    view->getMesh()->meshEntity->setSource(QUrl::fromLocalFile(filePath));
-    view->getCamera()->viewEntity((Qt3DCore::QEntity *)view->getMesh()->meshEntity);
-
-
-    // Log action into the sidebar QList
-    sidebar->logger->addItem("Loaded file: " + filePath);
-//    if (view->getMesh()->meshEntity->status() == Qt3DRender::QMesh::Ready)
-//        sidebar->logger->addItem("Loaded file: " + filePath);
-//    else if (view->getMesh()->meshEntity->status() == Qt3DRender::QMesh::Error)
-//        sidebar->logger->addItem("ERROR: Failed to load mesh");
-//    else if (view->getMesh()->meshEntity->status() == Qt3DRender::QMesh::None)
-//        sidebar->logger->addItem("Nothing to load");
+    if ((filePath.endsWith(".ply",Qt::CaseSensitive)) || (filePath.endsWith(".obj",Qt::CaseSensitive)) || (filePath.endsWith(".stl",Qt::CaseSensitive)))
+    {
+        view->getMesh()->meshEntity->setSource(QUrl::fromLocalFile(filePath));
+        view->getCamera()->viewEntity((Qt3DCore::QEntity *)view->getMesh()->meshEntity);
+        // Log action into the sidebar QList
+        sidebar->logger->addItem("Loaded file: " + filePath);
+    }
+    else
+    {
+       sidebar->logger->addItem("ERROR: Failed opening file");
+    }
 
 }
 
@@ -95,7 +94,6 @@ void AppSkeleton::newScene()
     view->getMesh()->meshEntity->setGeometry(nullptr);
     sidebar->logger->addItem("Loaded new scene");
 }
-
 
 void AppSkeleton::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -109,25 +107,16 @@ void AppSkeleton::dropEvent(QDropEvent *event)
     {
         QString filePath = url.toLocalFile();
 
-        if ((filePath.endsWith(".ply",Qt::CaseSensitive)) || (filePath.endsWith(".obj",Qt::CaseSensitive)))
+        if ((filePath.endsWith(".ply",Qt::CaseSensitive)) || (filePath.endsWith(".obj",Qt::CaseSensitive)) || (filePath.endsWith(".stl",Qt::CaseSensitive)))
         {
             view->getMesh()->meshEntity->setSource(QUrl::fromLocalFile(filePath));
             view->getCamera()->viewEntity((Qt3DCore::QEntity *)view->getMesh()->meshEntity);
+            // Log action into the sidebar QList
             sidebar->logger->addItem("Dropped file: " + filePath);
         }
         else
         {
            sidebar->logger->addItem("ERROR: Failed opening file");
         }
-        // Log action into the sidebar QList
-//        if (view->getMesh()->meshEntity->status() == Qt3DRender::QMesh::Ready)
-//            sidebar->logger->addItem("Dropped file: " + filePath);
-//        else if (view->getMesh()->meshEntity->status() == Qt3DRender::QMesh::Error)
-//            sidebar->logger->addItem("ERROR: Failed to load mesh");
-//        else if (view->getMesh()->meshEntity->status() == Qt3DRender::QMesh::None)
-//            sidebar->logger->addItem("Nothing to load");
-
-
-
     }
 }

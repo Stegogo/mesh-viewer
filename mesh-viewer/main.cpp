@@ -22,6 +22,9 @@
 #include <QSplitter>                            // for sidebar splitter
 #include <QSizeGrip>                            // for resizing the sidebar
 
+//#include <QtDataVisualization>
+//#include <Q3DSurface>
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -38,6 +41,7 @@ int main(int argc, char *argv[])
     Sidebar *sidebar = new Sidebar(widget);
     mw.setSidebar(sidebar);
     sidebar->setMesh(view->getMesh());
+    sidebar->setView(view);
 
     // Configuring layouts
     QHBoxLayout *hLayout = new QHBoxLayout(widget);
@@ -78,7 +82,6 @@ int main(int argc, char *argv[])
     mw.setCentralWidget(splitter);
     mw.show();
     mw.resize(800, 600);
-
 
     return a.exec();
 }

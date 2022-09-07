@@ -7,6 +7,7 @@
 
 #include <QDebug>
 #include <QPalette>
+#include <QSlider>
 
 Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
 {
@@ -16,13 +17,44 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     diffuseColor = Qt::white;
     ambientColor = Qt::white;
 
-    Section *geometrySection = new Section("Geometry", 300, this);
+    Section *geometrySection = new Section("Scene", 300, this);
     auto *geomLayout = new QVBoxLayout();
-    geomLayout->addWidget(new QLabel("Some Text in Section", geometrySection));
-    geomLayout->addWidget(new QPushButton("Button in Section", geometrySection));
+
+    // Light mode select section
+    auto *lightModeLayout = new QHBoxLayout();
+    geomLayout->addWidget(new QLabel("Light mode", geometrySection));
+
+    // Set up light mode buttons
+    lightAsIsButton = new QPushButton("As-is");
+    lightModeLayout->addWidget(lightAsIsButton);
+    lightFollowCameraButton = new QPushButton("Camera");
+    lightModeLayout->addWidget(lightFollowCameraButton);
+
+    geomLayout->addLayout(lightModeLayout);
+
+    // Light intensity slider
+    geomLayout->addWidget(new QLabel("Light intensity", geometrySection));
+    slider = new QSlider(Qt::Horizontal , this);
+    geomLayout->addWidget(slider);
+    slider->setMinimum(0);
+    slider->setMaximum(10);
+    slider->setSingleStep(1);
+    slider->setSliderPosition(8);
+
+    QLabel * label = new QLabel("8", this);
+    geomLayout->addWidget(label);
+    connect(slider, &QSlider::valueChanged, label, static_cast<void (QLabel::*)(int)>(&QLabel::setNum));
+    connect(slider, &QSlider::valueChanged, this, &Sidebar::setLightIntensity);
+
     geometrySection->setContentLayout(*geomLayout);
 
-    Section *viewSection = new Section("View", 300, this);
+    // Attach actions
+    connect(lightAsIsButton, SIGNAL(clicked()), this, SLOT(pickLightMode()));
+    connect(lightFollowCameraButton, SIGNAL(clicked()), this, SLOT(pickLightMode()));
+
+    //---------------------------
+
+    Section *viewSection = new Section("Mesh", 300, this);
     auto *viewLayout = new QVBoxLayout();
     viewLayout->addWidget(new QLabel("Adjust colors", viewSection));
 
@@ -69,11 +101,10 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     ambientLayout->addWidget(ambientColorButton);
     viewLayout->addLayout(ambientLayout);
 
-
     // Attach color picker
-    connect( lightColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
-    connect( diffuseColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
-    connect( ambientColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
+    connect(lightColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
+    connect(diffuseColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
+    connect(ambientColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
     viewSection->setContentLayout(*viewLayout);
 
     logger = new QListWidget();
@@ -84,9 +115,6 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     setLayout(m_layout);
 
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-
-
-
 }
 
 const QColor &Sidebar::getLightColor() const
@@ -156,21 +184,34 @@ void Sidebar::pickColor()
         return;
 }
 
-void Sidebar::logMeshStatus()
+//---------------------------
+// Picking and updating lighting modes
+void Sidebar::pickLightMode()
 {
-   //logger->addItem(mesh->meshEntity->status());
-
-//    if (mesh->meshEntity->status() == Qt3DRender::QMesh::Ready)
-//        logger->addItem("Mesh status: READY");
-//    else if (mesh->meshEntity->status() == Qt3DRender::QMesh::None)
-//        logger->addItem("Mesh status: NONE");
-//    else if (mesh->meshEntity->status() == Qt3DRender::QMesh::Loading)
-//        logger->addItem("Mesh status: LOADING");
-//    else
-//        logger->addItem("Mesh status: ERROR");
-
-
+    if (QObject::sender() == lightAsIsButton)
+    {
+        Qt3DCore::QEntity * rootEntity = new Qt3DCore::QEntity;
+        view->getLightEntity()->setParent(rootEntity);
+        mesh->setLight(view->getLight());
+    }
+    if (QObject::sender() == lightFollowCameraButton)
+    {
+        view->getLightEntity()->setParent((Qt3DCore::QEntity *)view->getCamera());
+        mesh->setLight(view->getLight());
+    }
 }
+
+void Sidebar::setLightIntensity()
+{
+    mesh->light->setIntensity((float)slider->value()/10);
+    //view->getLight()->setIntensity((float)slider->value()/10);
+}
+
+void Sidebar::setView(View3D *newView)
+{
+    view = newView;
+}
+
 
 Mesh *Sidebar::getMesh() const
 {

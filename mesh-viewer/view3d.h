@@ -29,6 +29,12 @@ public:
 
     Mesh *getMesh() const;
     void setMesh(Mesh *newMesh);
+    Qt3DCore::QEntity *getLightEntity() const;
+    void setLightEntity(Qt3DCore::QEntity *newLightEntity);
+    Qt3DRender::QPointLight * getLight() const;
+    void setLight(Qt3DRender::QPointLight *newLight);
+
+
 protected:
     void wheelEvent(QWheelEvent *event);
     void dragEnterEvent(QDragEnterEvent *event);

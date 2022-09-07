@@ -18,8 +18,11 @@ View3D::View3D()
 void View3D::setCamera(Qt3DRender::QCamera *newCamera)
 {
     m_camera = newCamera;
+
     // Setting light
+
     lightEntity = new Qt3DCore::QEntity(m_camera);
+
     light = new Qt3DRender::QPointLight(lightEntity);
     light->setColor("white");
     light->setIntensity(0.8f);
@@ -47,9 +50,7 @@ void View3D::setWidget(QWidget *newContainer)
 void View3D::wheelEvent(QWheelEvent* event)
 {
     m_camera->setFieldOfView(m_camera->fieldOfView() - event->delta() / 300.f);
-    //m_camera->viewAll();
 }
-
 
 Mesh *View3D::getMesh() const
 {
@@ -59,11 +60,29 @@ Mesh *View3D::getMesh() const
 void View3D::setMesh(Mesh *newMesh)
 {
     mesh = newMesh;
-
 }
 
 void View3D::resetFOV()
 {
     m_camera->viewAll();
-    qDebug() << "FOV reset";
+}
+
+Qt3DRender::QPointLight *View3D::getLight() const
+{
+    return light;
+}
+
+void View3D::setLight(Qt3DRender::QPointLight *newLight)
+{
+    light = newLight;
+}
+
+Qt3DCore::QEntity *View3D::getLightEntity() const
+{
+    return lightEntity;
+}
+
+void View3D::setLightEntity(Qt3DCore::QEntity *newLightEntity)
+{
+    lightEntity = newLightEntity;
 }

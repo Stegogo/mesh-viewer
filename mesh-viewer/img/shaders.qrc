@@ -2,6 +2,7 @@
     <qresource prefix="/shaders">
         <file>custom-shader.vert</file>
         <file>custom-shader.frag</file>
+        <file>custom-shader.geom</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

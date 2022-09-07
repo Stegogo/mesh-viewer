@@ -1,6 +1,8 @@
 #ifndef SIDEBAR_H
 #define SIDEBAR_H
 
+#include "mesh.h"
+#include "view3d.h"
 #include <QWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QHBoxLayout>
@@ -9,7 +11,7 @@
 #include <QColor>
 #include <QPixmap>
 #include <QPushButton>
-#include "mesh.h"
+#include <QSlider>
 
 //================================================
 // SIDEBAR CLASS
@@ -33,9 +35,12 @@ public:
 
     Mesh *getMesh() const;
 
+    void setView(View3D *newView);
+
 private slots:
     void pickColor();
-    void logMeshStatus();
+    void pickLightMode();
+    void setLightIntensity();
 private:
     QVBoxLayout *m_layout;
 
@@ -43,6 +48,8 @@ private:
     QColor diffuseColor;
     QColor ambientColor;
 
+    QPushButton * lightAsIsButton;
+    QPushButton * lightFollowCameraButton;
     QPushButton * lightColorButton;
     QPushButton * diffuseColorButton;
     QPushButton * ambientColorButton;
@@ -51,7 +58,10 @@ private:
     QPalette diffusePallete;
     QPalette ambientPallete;
 
+    QSlider * slider;
+
     Mesh *mesh;
+    View3D *view;
 };
 
 #endif // SIDEBAR_H
