@@ -29,6 +29,7 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     lightModeLayout->addWidget(lightAsIsButton);
     lightFollowCameraButton = new QPushButton("Camera");
     lightModeLayout->addWidget(lightFollowCameraButton);
+    lightFollowCameraButton->setDown(true);
 
     geomLayout->addLayout(lightModeLayout);
 
@@ -190,14 +191,21 @@ void Sidebar::pickLightMode()
 {
     if (QObject::sender() == lightAsIsButton)
     {
-        Qt3DCore::QEntity * rootEntity = new Qt3DCore::QEntity;
-        view->getLightEntity()->setParent(rootEntity);
+        //Qt3DCore::QEntity * rootEntity = new Qt3DCore::QEntity;
+        view->getLightEntity()->setParent(view->rootEntity);
+
+        mesh->lightEntity = view->getLightEntity();
         mesh->setLight(view->getLight());
+        view->getLight()->setColor(lightColor);
+        lightFollowCameraButton->setDown(false);
+        lightAsIsButton->setDown(true);
     }
     if (QObject::sender() == lightFollowCameraButton)
     {
         view->getLightEntity()->setParent((Qt3DCore::QEntity *)view->getCamera());
         mesh->setLight(view->getLight());
+        lightFollowCameraButton->setDown(true);
+        lightAsIsButton->setDown(false);
     }
 }
 

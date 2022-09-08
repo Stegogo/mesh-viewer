@@ -54,6 +54,7 @@ AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
     connect(quitTool, &QAction::triggered, qApp, &QApplication::quit);
 
     setAcceptDrops(true);
+
 }
 
 void AppSkeleton::setSidebar(Sidebar *newSidebar)
@@ -105,6 +106,7 @@ void AppSkeleton::dragEnterEvent(QDragEnterEvent *event)
 
 void AppSkeleton::dropEvent(QDropEvent *event)
 {
+
     foreach (const QUrl &url, event->mimeData()->urls())
     {
         QString filePath = url.toLocalFile();

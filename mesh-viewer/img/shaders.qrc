@@ -1,8 +1,7 @@
 <RCC>
     <qresource prefix="/shaders">
-        <file>custom-shader.vert</file>
-        <file>custom-shader.frag</file>
-        <file>custom-shader.geom</file>
+        <file>face-shading.vert</file>
+        <file>face-shading.frag</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

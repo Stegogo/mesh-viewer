@@ -24,6 +24,7 @@
 
 //#include <QtDataVisualization>
 //#include <Q3DSurface>
+#include <Qt3DExtras/QText2DEntity>
 
 int main(int argc, char *argv[])
 {
@@ -78,8 +79,8 @@ int main(int argc, char *argv[])
     view->setCamera(camera);
     view->setRootEntity(view->getMesh()->rootEntity);
 
-    camera->viewEntity(view->getMesh()->rootEntity);
-    camera->viewAll();
+    //camera->viewEntity(view->getMesh()->rootEntity);
+    //camera->viewAll();
 
     mw.setWindowTitle(QStringLiteral("MeshView"));
     mw.setCentralWidget(splitter);

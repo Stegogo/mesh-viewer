@@ -34,6 +34,7 @@ public:
     Qt3DRender::QPointLight * getLight() const;
     void setLight(Qt3DRender::QPointLight *newLight);
 
+    Qt3DCore::QEntity * rootEntity;
 
 protected:
     void wheelEvent(QWheelEvent *event);

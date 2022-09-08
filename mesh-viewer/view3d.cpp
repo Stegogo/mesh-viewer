@@ -9,7 +9,7 @@ View3D::View3D()
     m_camera = nullptr;
     m_container = nullptr;
     focus = nullptr;
-
+    rootEntity = new Qt3DCore::QEntity();
     mesh = new Mesh();
 
     lightEntity = nullptr;
@@ -51,7 +51,10 @@ void View3D::setWidget(QWidget *newContainer)
 }
 void View3D::wheelEvent(QWheelEvent* event)
 {
-    m_camera->setFieldOfView(m_camera->fieldOfView() - event->delta() / 300.f);
+    if(m_camera->fieldOfView() >= 0.1)
+        m_camera->setFieldOfView(m_camera->fieldOfView() - event->delta() / 300.f);
+    else
+        m_camera->setFieldOfView(0.1);
 
 }
 
@@ -68,6 +71,7 @@ void View3D::setMesh(Mesh *newMesh)
 void View3D::resetFOV()
 {
     m_camera->viewAll();
+    //m_camera->viewEntity(mesh->rootEntity);
 }
 
 Qt3DRender::QPointLight *View3D::getLight() const
