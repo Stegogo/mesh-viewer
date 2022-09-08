@@ -40,59 +40,9 @@ Mesh::Mesh()
     // Configuring mesh
     meshEntity = new Qt3DRender::QMesh;
     meshEntity->setSource(QUrl::fromLocalFile(meshFilePath));
-    //meshEntity->setGeometry(nullptr);
     rootEntity->addComponent(meshEntity);
-    //entity->addComponent(meshEntity);
     rootEntity->addComponent(material);
-    //entity->addComponent(material);
-    //addMaterial(rootEntity);
-    //entity->addComponent(material);
 
-    //!-----------------------DANGER ZONE---------------------------
-    //!-----------------------DANGER ZONE---------------------------
-
-//    Qt3DRender::QMaterial *material1 = new Qt3DRender::QMaterial();
-//    Qt3DRender::QMaterial *material2 = new Qt3DRender::QMaterial();
-
-//    // Create effect, technique, render pass and shader
-//    Qt3DRender::QEffect *effect = new Qt3DRender::QEffect();
-//    Qt3DRender::QTechnique *gl3Technique = new Qt3DRender::QTechnique();
-//    Qt3DRender::QRenderPass *gl3Pass = new Qt3DRender::QRenderPass();
-//    Qt3DRender::QShaderProgram *glShader = new Qt3DRender::QShaderProgram();
-
-//    // Set the shader on the render pass
-//    glShader->setVertexShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/custom-shader.vert"))));
-//    glShader->setFragmentShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/custom-shader.frag"))));
-//    gl3Pass->setShaderProgram(glShader);
-
-//    // Add the pass to the technique
-//    gl3Technique->addRenderPass(gl3Pass);
-
-//    // Set the targeted GL version for the technique
-//    gl3Technique->graphicsApiFilter()->setApi(Qt3DRender::QGraphicsApiFilter::OpenGL);
-//    gl3Technique->graphicsApiFilter()->setMajorVersion(3);
-//    gl3Technique->graphicsApiFilter()->setMinorVersion(1);
-//    gl3Technique->graphicsApiFilter()->setProfile(Qt3DRender::QGraphicsApiFilter::CoreProfile);
-
-//    // Add the technique to the effect
-//    effect->addTechnique(gl3Technique);
-
-//    // Set the effect on the materials
-//    material1->setEffect(effect);
-//    material2->setEffect(effect);
-
-//    // Set different parameters on the materials
-//    const QString parameterName = QStringLiteral("color");
-//    material1->addParameter(new Qt3DRender::QParameter(parameterName, QColor::fromRgbF(0.0f, 1.0f, 0.0f, 1.0f)));
-//    material2->addParameter(new Qt3DRender::QParameter(parameterName, QColor::fromRgbF(1.0f, 1.0f, 1.0f, 1.0f)));
-
-//    rootEntity->addComponent(material1);
-//    //rootEntity->addComponent(material2);
-//    entity->addComponent(material1);
-//    //entity->addComponent(material2);
-
-    //!-----------------------DANGER ZONE---------------------------
-    //!-----------------------DANGER ZONE---------------------------
 
     Qt3DCore::QTransform *objectTransform = new Qt3DCore::QTransform(entity);
     rootEntity->addComponent(objectTransform);
@@ -135,8 +85,9 @@ void Mesh::addMaterial(Qt3DCore::QEntity *entity)
     Qt3DRender::QShaderProgram *glShader = new Qt3DRender::QShaderProgram();
 
     // Connect shader code
-    glShader->setVertexShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/face-shading.vert"))));
-    glShader->setFragmentShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/face-shading.frag"))));
+    glShader->setVertexShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/wireframe.vert"))));
+    glShader->setFragmentShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/wireframe.frag"))));
+    glShader->setGeometryShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/wireframe.geom"))));
 
     // Set the shader on the render pass
     gl3Pass->setShaderProgram(glShader);
@@ -164,6 +115,19 @@ void Mesh::addMaterial(Qt3DCore::QEntity *entity)
     // Set the effect on the materials
     // and add it to the entity
     material->setEffect(effect);
+
+    // Add parameters for material
+    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("ka"), QVector3D( 0.1, 0.1, 0.1 )));
+    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("kd"), QVector3D( 0.7, 0.7, 0.7 )));
+    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("ks"), QVector3D( 1, 1, 1 )));
+    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("shininess"), 100));
+
+    // Add parameters for effect
+    gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("light.position"), QVector4D( 0.0, 0.0, 0.0, 1.0 )));
+    gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("light.intensity"), QVector3D( 1.0, 1.0, 1.0 )));
+    gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("line.width"), 1.0));
+    gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("line.color"), QVector4D( 1.0, 1.0, 1.0, 1.0 )));
+
     entity->addComponent(material);
 }
 
