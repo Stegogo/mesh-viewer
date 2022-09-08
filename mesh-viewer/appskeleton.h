@@ -18,13 +18,16 @@ class AppSkeleton : public QMainWindow
     Q_OBJECT
 public:
     explicit AppSkeleton(QWidget *parent = nullptr);
+
     void setSidebar(Sidebar *newSidebar);
-
     void setView(View3D *newView);
-
 private:
     QPixmap newFilePix;
     QPixmap openFilePix;
+    QPixmap wireframeViewPix;
+    QPixmap wireframeFaceViewPix;
+    QPixmap faceViewPix;
+    QPixmap faceShadingPix;
     QPixmap quitPix;
 
     View3D *view;
@@ -34,6 +37,7 @@ private:
     void newScene();
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
+    void wireframeView();
 };
 
 #endif // APPSKELETON_H

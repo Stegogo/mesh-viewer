@@ -71,7 +71,6 @@ void View3D::setMesh(Mesh *newMesh)
 void View3D::resetFOV()
 {
     m_camera->viewAll();
-    //m_camera->viewEntity(mesh->rootEntity);
 }
 
 Qt3DRender::QPointLight *View3D::getLight() const

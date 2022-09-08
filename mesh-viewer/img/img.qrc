@@ -3,5 +3,9 @@
         <file>icon-quit.png</file>
         <file>icon-open-file.png</file>
         <file>icon-new-file.png</file>
+        <file>icon-wireframe.png</file>
+        <file>icon-wireframe-face.png</file>
+        <file>icon-bevel-shading.png</file>
+        <file>icon-face.png</file>
     </qresource>
 </RCC>

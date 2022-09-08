@@ -1,5 +1,5 @@
 #include "mesh.h"
-#include "customeffect.h"
+
 #include <QUrl>                                 // for working with URLs
 #include <Qt3DExtras/Qt3DWindow>                // for 3D view
 #include <Qt3DExtras/QPhongMaterial>            // for material
@@ -70,8 +70,6 @@ void Mesh::setLight(Qt3DRender::QPointLight *newLight)
 {
     light = newLight;
 }
-
-
 
 void Mesh::addMaterial(Qt3DCore::QEntity *entity)
 {

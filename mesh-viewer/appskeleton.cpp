@@ -24,16 +24,10 @@ AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
     // Register new images we will use as icons
     newFilePix = QPixmap(":img/icon-new-file.png");
     openFilePix = QPixmap(":img/icon-open-file.png");
+    wireframeViewPix = QPixmap(":img/icon-wireframe.png");
+    wireframeFaceViewPix = QPixmap(":img/icon-wireframe-face.png");
+    faceViewPix = QPixmap(":img/icon-face.png");
     quitPix = QPixmap(":img/icon-quit.png");
-
-    // Adding actions for menu
-    QAction *quit = new QAction("&Quit", this);
-
-    // Adding 'File' menu
-    QMenu *file;
-    file = menuBar()->addMenu("&File");
-    file->addAction(quit);
-    connect(quit, &QAction::triggered, qApp, &QApplication::quit);
 
     // Creating a toolbar
     QToolBar *toolbar = addToolBar("Main toolbar");
@@ -42,15 +36,22 @@ AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
     QAction *newTool = toolbar->addAction(QIcon(newFilePix),"New File");            // Add a 'New File' action to toolbar
     QAction *openTool = toolbar->addAction(QIcon(openFilePix), "Open File");        // Add a 'Open File' action to toolbar
     toolbar->addSeparator();                                                        // Separator --------------------
+    QAction *wireframeTool = toolbar->addAction(QIcon(wireframeViewPix),"Wireframe View");
+    QAction *wireframeFaceTool = toolbar->addAction(QIcon(wireframeFaceViewPix),"Wireframe View");
+    QAction *faceTool = toolbar->addAction(QIcon(faceViewPix),"Wireframe View");
+    toolbar->addSeparator();                                                        // Separator --------------------
     QAction *quitTool = toolbar->addAction(QIcon(quitPix), "Quit");                 // Add a 'Quit' action to toolbar
 
     // Add shortcuts
     newTool->setShortcut(tr("CTRL+N"));
     quitTool->setShortcut(tr("CTRL+Q"));
-    openTool->setShortcut(tr("CTRL+O"));\
+    openTool->setShortcut(tr("CTRL+O"));
 
     connect(newTool, &QAction::triggered, this, &AppSkeleton::newScene);
     connect(openTool, &QAction::triggered, this, &AppSkeleton::openFileDialog);
+    connect(wireframeTool, &QAction::triggered, this, &AppSkeleton::wireframeView);
+    connect(wireframeFaceTool, &QAction::triggered, this, &AppSkeleton::wireframeView);
+    connect(faceTool, &QAction::triggered, this, &AppSkeleton::wireframeView);
     connect(quitTool, &QAction::triggered, qApp, &QApplication::quit);
 
     setAcceptDrops(true);
@@ -116,17 +117,6 @@ void AppSkeleton::dropEvent(QDropEvent *event)
             view->getMesh()->meshEntity->setSource(QUrl::fromLocalFile(filePath));
             view->getCamera()->viewEntity((Qt3DCore::QEntity *)view->getMesh()->meshEntity);
 
-            //!-------------------DANGER ZONE-------------------
-            //!-------------------DANGER ZONE-------------------
-
-            qDebug() << view->getMesh()->meshEntity->status();
-
-            view->getMesh()->addMaterial(view->getMesh()->rootEntity);
-
-
-            //!-------------------DANGER ZONE-------------------
-            //!-------------------DANGER ZONE-------------------
-
             // Log action into the sidebar QList
             sidebar->logger->addItem("Dropped file: " + filePath);
         }
@@ -135,4 +125,10 @@ void AppSkeleton::dropEvent(QDropEvent *event)
            sidebar->logger->addItem("ERROR: Failed opening file");
         }
     }
+}
+
+void AppSkeleton::wireframeView()
+{
+    view->getMesh()->rootEntity->removeComponent(view->getMesh()->material);
+    view->getMesh()->addMaterial(view->getMesh()->rootEntity);
 }
