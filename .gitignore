@@ -59,3 +59,7 @@ test-meshes/sphere-binary.stl
 test-meshes/model-binary.stl
 test-meshes/star.ply
 test-meshes/star.obj
+mesh-viewer/img/icon-quit.png~
+mesh-viewer/img/icon-face.png~
+mesh-viewer/img/icon-wireframe-face.png~
+mesh-viewer/img/icon-wireframe.png~
