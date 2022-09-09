@@ -15,6 +15,7 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     lightColor = Qt::white;
     diffuseColor = Qt::white;
     ambientColor = Qt::white;
+    specularColor = Qt::white;
     wireframeColor = Qt::white;
 
     Section *geometrySection = new Section("Scene", 300, this);
@@ -35,17 +36,17 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
 
     // Light intensity slider
     geomLayout->addWidget(new QLabel("Light intensity", geometrySection));
-    slider = new QSlider(Qt::Horizontal , this);
-    geomLayout->addWidget(slider);
-    slider->setMinimum(0);
-    slider->setMaximum(10);
-    slider->setSingleStep(1);
-    slider->setSliderPosition(8);
+    sliderLight = new QSlider(Qt::Horizontal , this);
+    geomLayout->addWidget(sliderLight);
+    sliderLight->setMinimum(0);
+    sliderLight->setMaximum(10);
+    sliderLight->setSingleStep(1);
+    sliderLight->setSliderPosition(8);
 
-    QLabel * label = new QLabel("8", this);
-    geomLayout->addWidget(label);
-    connect(slider, &QSlider::valueChanged, label, static_cast<void (QLabel::*)(int)>(&QLabel::setNum));
-    connect(slider, &QSlider::valueChanged, this, &Sidebar::setLightIntensity);
+//    QLabel * label = new QLabel("8", this);
+//    geomLayout->addWidget(label);
+//    connect(sliderLight, &QSlider::valueChanged, label, static_cast<void (QLabel::*)(int)>(&QLabel::setNum));
+    connect(sliderLight, &QSlider::valueChanged, this, &Sidebar::setLightIntensity);
 
     geometrySection->setContentLayout(*geomLayout);
 
@@ -102,6 +103,20 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     ambientLayout->addWidget(ambientColorButton);
     viewLayout->addLayout(ambientLayout);
 
+    // Setting up specular color picker:
+    auto *specularLayout = new QHBoxLayout();
+    specularLayout->addWidget(new QLabel("Specular"));
+    // Adjust the button
+    specularColorButton = new QPushButton(" ");
+    specularPallete = specularColorButton->palette();
+    specularPallete.setColor(QPalette::Button, specularColor);
+    specularColorButton->setAutoFillBackground(true);
+    specularColorButton->setFlat(true);
+    specularColorButton->setPalette(specularPallete);
+    specularColorButton->update();
+    specularLayout->addWidget(specularColorButton);
+    viewLayout->addLayout(specularLayout);
+
     // Setting up wireframe color picker:
     auto *wireframeLayout = new QHBoxLayout();
     wireframeLayout->addWidget(new QLabel("Wireframe"));
@@ -120,8 +135,23 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     connect(lightColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
     connect(diffuseColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
     connect(ambientColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
+    connect(specularColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
     connect(wireframeColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
     viewSection->setContentLayout(*viewLayout);
+
+    // Light intensity slider
+    viewLayout->addWidget(new QLabel("Line width", viewSection));
+    sliderLine = new QSlider(Qt::Horizontal , this);
+    viewLayout->addWidget(sliderLine);
+    sliderLine->setMinimum(0);
+    sliderLine->setMaximum(20);
+    sliderLine->setSingleStep(1);
+    sliderLine->setSliderPosition(10);
+
+//    QLabel * label2 = new QLabel("10", this);
+//    viewLayout->addWidget(label2);
+//    connect(sliderLine, &QSlider::valueChanged, label2, static_cast<void (QLabel::*)(int)>(&QLabel::setNum));
+    connect(sliderLine, &QSlider::valueChanged, this, &Sidebar::setLineWidth);
 
     logger = new QListWidget();
 
@@ -131,20 +161,6 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     setLayout(m_layout);
 
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-}
-
-const QColor &Sidebar::getLightColor() const
-{
-    return lightColor;
-}
-const QColor &Sidebar::getAmbientColor() const
-{
-    return ambientColor;
-}
-
-const QColor &Sidebar::getDiffuseColor() const
-{
-    return diffuseColor;
 }
 
 //---------------------------
@@ -175,7 +191,10 @@ void Sidebar::pickColor()
         // Update ambient color
         mesh->light->setColor(lightColor);
         mesh->lightColor->setValue(lightColor);
-        //mesh->material->setSpecular(lightColor);
+
+        qDebug() << "light" << mesh->light->color();
+        qDebug() << "light" << mesh->lightColor->value();
+
     }
     else if (QObject::sender() == diffuseColorButton)
     {
@@ -190,6 +209,9 @@ void Sidebar::pickColor()
         mesh->material->setDiffuse(diffuseColor);
         mesh->kd->setValue(diffuseColor);
 
+        qDebug() << "diffuse" << mesh->material->diffuse();
+        qDebug() << "diffuse" << mesh->kd->value();
+
     }
     else if (QObject::sender() == ambientColorButton)
     {
@@ -203,6 +225,24 @@ void Sidebar::pickColor()
         // Update ambient color
         mesh->material->setAmbient(ambientColor);
         mesh->ka->setValue(ambientColor);
+
+        qDebug() << "ambient" <<mesh->material->ambient();
+        qDebug() << "ambient" << mesh->ka->value();
+        qDebug() << "diffuse" << mesh->material->diffuse();
+        qDebug() << "diffuse" << mesh->kd->value();
+    }
+    else if (QObject::sender() == specularColorButton)
+    {
+        specularColor = newColor;
+        specularPallete.setColor(QPalette::Button, specularColor);
+        specularColorButton->setAutoFillBackground(true);
+        specularColorButton->setFlat(true);
+        specularColorButton->setPalette(specularPallete);
+        specularColorButton->update();
+
+        // Update specular color
+        mesh->material->setSpecular(specularColor);
+        mesh->ks->setValue(specularColor);
     }
     else if (QObject::sender() == wireframeColorButton)
     {
@@ -246,14 +286,40 @@ void Sidebar::pickLightMode()
 
 void Sidebar::setLightIntensity()
 {
-    auto value = (float)slider->value()/10;
+    auto value = (float)sliderLight->value()/10;
     mesh->light->setIntensity(value);
     mesh->lightIntensity->setValue(QVector3D( value, value, value ));
+}
+
+void Sidebar::setLineWidth()
+{
+    auto value = (float)sliderLine->value()/10;
+    //mesh->lightIntensity->setValue(QVector3D( value, value, value ));
+    mesh->lineWidth->setValue(value);
+}
+
+const QColor &Sidebar::getSpecularColor() const
+{
+    return specularColor;
 }
 
 const QColor &Sidebar::getWireframeColor() const
 {
     return wireframeColor;
+}
+
+const QColor &Sidebar::getLightColor() const
+{
+    return lightColor;
+}
+const QColor &Sidebar::getAmbientColor() const
+{
+    return ambientColor;
+}
+
+const QColor &Sidebar::getDiffuseColor() const
+{
+    return diffuseColor;
 }
 
 void Sidebar::setView(View3D *newView)

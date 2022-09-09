@@ -34,9 +34,7 @@ void View3D::setCamera(Qt3DRender::QCamera *newCamera)
 
     mesh->setLight(light);
 
-    m_camera->viewAll();
-
-    //connect(mesh->meshEntity, &Qt3DRender::QMesh::sourceChanged, this, &View3D::resetFOV);
+    connect(mesh->meshEntity, &Qt3DRender::QMesh::sourceChanged, this, &View3D::resetFOV);
 
 }
 

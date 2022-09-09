@@ -132,31 +132,11 @@ void AppSkeleton::wireframeMode()
 {
     // Wireframe ONLY
     if (QObject::sender() == wireframeTool)
-    {
-        // Remove default material
-        // and add wireframe material
-        view->getMesh()->rootEntity->removeComponent(view->getMesh()->material);
-        view->getMesh()->rootEntity->addComponent(view->getMesh()->wireframeMaterial);
         view->getMesh()->wireframeMode->setValue(1);
-    }
     // Wireframe + Face
     else if (QObject::sender() == wireframeFaceTool)
-    {
-        // Add default material
-        // and add wireframe material
-        // ??
-        view->getMesh()->rootEntity->removeComponent(view->getMesh()->material);
-        view->getMesh()->rootEntity->addComponent(view->getMesh()->wireframeMaterial);
         view->getMesh()->wireframeMode->setValue(2);
-
-
-    }
     // Face ONLY
     else if (QObject::sender() == faceTool)
-    {
-        // Remove wireframe material
-        // and add default material
-        view->getMesh()->rootEntity->removeComponent(view->getMesh()->wireframeMaterial);
-        view->getMesh()->rootEntity->addComponent(view->getMesh()->material);
-    }
+        view->getMesh()->wireframeMode->setValue(0);
 }

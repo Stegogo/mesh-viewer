@@ -138,7 +138,6 @@ CamController::CamController(Qt3DCore::QNode *parent)
 void CamController::setCamera(Qt3DRender::QCamera *newCamera)
 {
     m_camera = newCamera;
-
 }
 
 float CamController::linearSpeed() const

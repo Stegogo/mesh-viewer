@@ -36,16 +36,20 @@ public:
     void setView(View3D *newView);
 
     Mesh *getMesh() const;
+    const QColor &getSpecularColor() const;
+
 private slots:
     void pickColor();
     void pickLightMode();
     void setLightIntensity();
+    void setLineWidth();
 private:
     QVBoxLayout *m_layout;
 
     QColor lightColor;
     QColor diffuseColor;
     QColor ambientColor;
+    QColor specularColor;
     QColor wireframeColor;
 
     QPushButton * lightAsIsButton;
@@ -53,14 +57,17 @@ private:
     QPushButton * lightColorButton;
     QPushButton * diffuseColorButton;
     QPushButton * ambientColorButton;
+    QPushButton * specularColorButton;
     QPushButton * wireframeColorButton;
 
     QPalette lightPallete;
     QPalette diffusePallete;
     QPalette ambientPallete;
+    QPalette specularPallete;
     QPalette wireframePallete;
 
-    QSlider * slider;
+    QSlider * sliderLight;
+    QSlider * sliderLine;
 
     Mesh *mesh;
     View3D *view;

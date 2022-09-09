@@ -48,7 +48,8 @@ vec3 adsModel( const in vec3 pos, const in vec3 n )
     vec3 specular = vec3( pow( max( dot( r, v ), 0.0 ), shininess ) );
 
     // Combine the ambient, diffuse and specular contributions
-    return light.intensity * ( ka + kd * diffuse + ks * specular );
+    //return light.intensity * ( kd + ka * diffuse + ks * specular );
+    return light.intensity * ( (kd * diffuse) + (ks * specular) + ka);
 }
 
 vec4 shadeLine( const in vec4 color )
@@ -87,21 +88,28 @@ vec4 shadeLine( const in vec4 color )
 
     // Blend between line color and phong color
     float mixVal;
-    if ( d < line.width - 0.2 )
+    if (mode == 0)
     {
-        mixVal = 1.0;
-    }
-    else if ( d > line.width + 0.2 )
-    {
-        if (mode == 1)
-            discard;
-        else
-            mixVal = 0.0;
+        mixVal = 0.0;
     }
     else
     {
-        float x = d - ( line.width - 0.2 );
-        mixVal = exp2( -2.0 * ( x * x ) );
+        if ( d < line.width)
+        {
+            mixVal = 1.0;
+        }
+        else if ( d > line.width)
+        {
+            if (mode == 1)
+                discard;
+            else
+                mixVal = 0.0;
+        }
+        else
+        {
+            float x = d - ( line.width);
+            mixVal = exp2( -2.0 * ( x * x ) );
+        }
     }
 
     return mix( color, line.color, mixVal );
@@ -112,5 +120,4 @@ void main()
     // Calculate the color from the phong model
     vec4 color = vec4( adsModel( fs_in.position, normalize( fs_in.normal )), 1.0)  * light.color;
     fragColor = shadeLine( color );
-    fragColor.a = 0.3;
 }
