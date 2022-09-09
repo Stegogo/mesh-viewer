@@ -147,9 +147,9 @@ void Mesh::addWireframeMaterial()
 
     // Add parameters for effect
     gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("light.position"), QVector4D( 0.0, 0.0, 0.0, 1.0 )));
-    gl3Technique->addParameter(lightIntensity);
     gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("line.width"), 1.0));
     gl3Technique->addParameter(lineColor);
+    gl3Technique->addParameter(lightIntensity);
 
 }
 
