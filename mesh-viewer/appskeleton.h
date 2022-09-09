@@ -30,6 +30,13 @@ private:
     QPixmap faceShadingPix;
     QPixmap quitPix;
 
+    QAction *newTool;
+    QAction *openTool;
+    QAction *wireframeTool;
+    QAction *wireframeFaceTool;
+    QAction *faceTool;
+    QAction *quitTool;
+
     View3D *view;
     Sidebar *sidebar;
 
@@ -37,7 +44,7 @@ private:
     void newScene();
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
-    void wireframeView();
+    void wireframeMode();
 };
 
 #endif // APPSKELETON_H

@@ -2,9 +2,8 @@
 #include "section.h"
 
 #include <QLabel>
-
 #include <QColorDialog>
-
+#include <Qt3DRender/QParameter>
 #include <QDebug>
 #include <QPalette>
 #include <QSlider>
@@ -157,7 +156,9 @@ void Sidebar::pickColor()
         lightColorButton->setPalette(lightPallete);
         lightColorButton->update();
 
+        // Update ambient color
         mesh->light->setColor(lightColor);
+        //mesh->ks->setValue(lightColor);
     }
     else if (QObject::sender() == diffuseColorButton)
     {
@@ -168,7 +169,10 @@ void Sidebar::pickColor()
         diffuseColorButton->setPalette(diffusePallete);
         diffuseColorButton->update();
 
+        // Update diffuse color
         mesh->material->setDiffuse(diffuseColor);
+        mesh->kd->setValue(diffuseColor);
+
     }
     else if (QObject::sender() == ambientColorButton)
     {
@@ -179,7 +183,9 @@ void Sidebar::pickColor()
         ambientColorButton->setPalette(ambientPallete);
         ambientColorButton->update();
 
+        // Update ambient color
         mesh->material->setAmbient(ambientColor);
+        mesh->ka->setValue(ambientColor);
     }
     else
         return;

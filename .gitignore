@@ -57,3 +57,5 @@ test-meshes/model2.ply
 test-meshes/12140_Skull_v3_L2.obj
 test-meshes/sphere-binary.stl
 test-meshes/model-binary.stl
+test-meshes/star.ply
+test-meshes/star.obj

@@ -15,6 +15,9 @@ uniform vec3 kd;            // Diffuse reflectivity
 uniform vec3 ks;            // Specular reflectivity
 uniform float shininess;    // Specular shininess factor
 
+uniform int mode;           // 1 to render lines only
+                            // 2 to render the inside of mesh
+
 in WireframeVertex {
     vec3 position;
     vec3 normal;
@@ -83,17 +86,20 @@ vec4 shadeLine( const in vec4 color )
 
     // Blend between line color and phong color
     float mixVal;
-    if ( d < line.width - 1.0 )
+    if ( d < line.width - 0.2 )
     {
         mixVal = 1.0;
     }
-    else if ( d > line.width + 1.0 )
+    else if ( d > line.width + 0.2 )
     {
-        mixVal = 0.0;
+        if (mode == 1)
+            discard;
+        else
+            mixVal = 0.0;
     }
     else
     {
-        float x = d - ( line.width - 1.0 );
+        float x = d - ( line.width - 0.2 );
         mixVal = exp2( -2.0 * ( x * x ) );
     }
 
@@ -103,6 +109,7 @@ vec4 shadeLine( const in vec4 color )
 void main()
 {
     // Calculate the color from the phong model
-    vec4 color = vec4( adsModel( fs_in.position, normalize( fs_in.normal ) ), 1.0 );
+    vec4 color = vec4( adsModel( fs_in.position, normalize( fs_in.normal ) ), 1.0);
     fragColor = shadeLine( color );
+    fragColor.a = 0.3;
 }

@@ -15,6 +15,7 @@
 #include <QDropEvent>
 #include <QMimeData>
 #include <Qt3DRender/QCamera>
+#include <Qt3DRender/QParameter>
 
 AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
 {
@@ -33,14 +34,18 @@ AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
     QToolBar *toolbar = addToolBar("Main toolbar");
 
     // Adding actions for toolbar
-    QAction *newTool = toolbar->addAction(QIcon(newFilePix),"New File");            // Add a 'New File' action to toolbar
-    QAction *openTool = toolbar->addAction(QIcon(openFilePix), "Open File");        // Add a 'Open File' action to toolbar
+    newTool = toolbar->addAction(QIcon(newFilePix),"New File");            // Add a 'New File' action to toolbar
+    openTool = toolbar->addAction(QIcon(openFilePix), "Open File");        // Add a 'Open File' action to toolbar
+
     toolbar->addSeparator();                                                        // Separator --------------------
-    QAction *wireframeTool = toolbar->addAction(QIcon(wireframeViewPix),"Wireframe View");
-    QAction *wireframeFaceTool = toolbar->addAction(QIcon(wireframeFaceViewPix),"Wireframe View");
-    QAction *faceTool = toolbar->addAction(QIcon(faceViewPix),"Wireframe View");
+
+    wireframeTool = toolbar->addAction(QIcon(wireframeViewPix),"Wireframe only");
+    wireframeFaceTool = toolbar->addAction(QIcon(wireframeFaceViewPix),"Wireframe + Face");
+    faceTool = toolbar->addAction(QIcon(faceViewPix),"Face only");
+
     toolbar->addSeparator();                                                        // Separator --------------------
-    QAction *quitTool = toolbar->addAction(QIcon(quitPix), "Quit");                 // Add a 'Quit' action to toolbar
+
+    quitTool = toolbar->addAction(QIcon(quitPix), "Quit");                 // Add a 'Quit' action to toolbar
 
     // Add shortcuts
     newTool->setShortcut(tr("CTRL+N"));
@@ -49,9 +54,9 @@ AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
 
     connect(newTool, &QAction::triggered, this, &AppSkeleton::newScene);
     connect(openTool, &QAction::triggered, this, &AppSkeleton::openFileDialog);
-    connect(wireframeTool, &QAction::triggered, this, &AppSkeleton::wireframeView);
-    connect(wireframeFaceTool, &QAction::triggered, this, &AppSkeleton::wireframeView);
-    connect(faceTool, &QAction::triggered, this, &AppSkeleton::wireframeView);
+    connect(wireframeTool, &QAction::triggered, this, &AppSkeleton::wireframeMode);
+    connect(wireframeFaceTool, &QAction::triggered, this, &AppSkeleton::wireframeMode);
+    connect(faceTool, &QAction::triggered, this, &AppSkeleton::wireframeMode);
     connect(quitTool, &QAction::triggered, qApp, &QApplication::quit);
 
     setAcceptDrops(true);
@@ -95,8 +100,6 @@ void AppSkeleton::newScene()
 {
     view->getMesh()->meshEntity->setGeometry(nullptr);
     sidebar->logger->addItem("Loaded new scene");
-
-
 }
 
 void AppSkeleton::dragEnterEvent(QDragEnterEvent *event)
@@ -121,14 +124,39 @@ void AppSkeleton::dropEvent(QDropEvent *event)
             sidebar->logger->addItem("Dropped file: " + filePath);
         }
         else
-        {
            sidebar->logger->addItem("ERROR: Failed opening file");
-        }
     }
 }
 
-void AppSkeleton::wireframeView()
+void AppSkeleton::wireframeMode()
 {
-    view->getMesh()->rootEntity->removeComponent(view->getMesh()->material);
-    view->getMesh()->addMaterial(view->getMesh()->rootEntity);
+    // Wireframe ONLY
+    if (QObject::sender() == wireframeTool)
+    {
+        // Remove default material
+        // and add wireframe material
+        view->getMesh()->rootEntity->removeComponent(view->getMesh()->material);
+        view->getMesh()->rootEntity->addComponent(view->getMesh()->wireframeMaterial);
+        view->getMesh()->wireframeMode->setValue(1);
+    }
+    // Wireframe + Face
+    else if (QObject::sender() == wireframeFaceTool)
+    {
+        // Add default material
+        // and add wireframe material
+        // ??
+        view->getMesh()->rootEntity->removeComponent(view->getMesh()->material);
+        view->getMesh()->rootEntity->addComponent(view->getMesh()->wireframeMaterial);
+        view->getMesh()->wireframeMode->setValue(2);
+
+
+    }
+    // Face ONLY
+    else if (QObject::sender() == faceTool)
+    {
+        // Remove wireframe material
+        // and add default material
+        view->getMesh()->rootEntity->removeComponent(view->getMesh()->wireframeMaterial);
+        view->getMesh()->rootEntity->addComponent(view->getMesh()->material);
+    }
 }

@@ -22,12 +22,14 @@
 #include <Qt3DRender/QGraphicsApiFilter>
 #include <QtCore/QUrl>
 #include <Qt3DRender/QShaderProgram>
-#include <QMetalRoughMaterial>
+#include <QOpenGLFunctions>
 
 Mesh::Mesh()
 {
-    meshFilePath = "/home/liz/!Work/mesh-viewer/test-meshes/torus-knot.ply";
 
+
+
+    meshFilePath = "/home/liz/!Work/mesh-viewer/test-meshes/torus-knot.ply";
 
     // Setting 3D entities
     rootEntity = new Qt3DCore::QEntity;
@@ -36,6 +38,15 @@ Mesh::Mesh()
     // Setting material
     material = new Qt3DExtras::QPhongMaterial();
     material->setDiffuse(QColor(254, 254, 254));
+
+    wireframeMaterial = nullptr;
+    wireframeEffect = nullptr;
+    wireframeMode = nullptr;
+    shininess = nullptr;
+    ka = nullptr;
+    kd = nullptr;
+    ks = nullptr;
+    addWireframeMaterial();
 
     // Configuring mesh
     meshEntity = new Qt3DRender::QMesh;
@@ -48,7 +59,6 @@ Mesh::Mesh()
     rootEntity->addComponent(objectTransform);
 
     qDebug() << rootEntity->components();
-
 
     lightEntity = nullptr;
     light = nullptr;
@@ -71,13 +81,22 @@ void Mesh::setLight(Qt3DRender::QPointLight *newLight)
     light = newLight;
 }
 
-void Mesh::addMaterial(Qt3DCore::QEntity *entity)
+void Mesh::addWireframeMaterial()
 {
+
+//    not sure abt this
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    glEnable( GL_BLEND );
+//    glClearColor(0.0,0.0,0.0,0.0);
+//    glEnable(GL_CULL_FACE);
+//    glCullFace(GL_BACK);
+//    glDepthMask(GL_FALSE);
+
     // Create custom material
-    Qt3DRender::QMaterial * material = new Qt3DRender::QMaterial();
+    wireframeMaterial = new Qt3DRender::QMaterial();
 
     // Create effect, technique, render pass and shader
-    Qt3DRender::QEffect *effect = new Qt3DRender::QEffect();
+    wireframeEffect = new Qt3DRender::QEffect();
     Qt3DRender::QTechnique *gl3Technique = new Qt3DRender::QTechnique();
     Qt3DRender::QRenderPass *gl3Pass = new Qt3DRender::QRenderPass();
     Qt3DRender::QShaderProgram *glShader = new Qt3DRender::QShaderProgram();
@@ -91,7 +110,7 @@ void Mesh::addMaterial(Qt3DCore::QEntity *entity)
     gl3Pass->setShaderProgram(glShader);
 
     // Create filter
-    Qt3DRender::QFilterKey *filterkey = new Qt3DRender::QFilterKey(material);
+    Qt3DRender::QFilterKey *filterkey = new Qt3DRender::QFilterKey(wireframeMaterial);
     filterkey->setName(QStringLiteral("renderingStyle"));
     filterkey->setValue(QStringLiteral("forward"));
 
@@ -108,24 +127,31 @@ void Mesh::addMaterial(Qt3DCore::QEntity *entity)
     gl3Technique->addFilterKey(filterkey);
 
     // Add the technique to the effect
-    effect->addTechnique(gl3Technique);
+    wireframeEffect->addTechnique(gl3Technique);
 
     // Set the effect on the materials
     // and add it to the entity
-    material->setEffect(effect);
+    wireframeMaterial->setEffect(wireframeEffect);
+
+    // Initialize parameters
+    wireframeMode = new Qt3DRender::QParameter(QStringLiteral("mode"), 1);
+    ka = new Qt3DRender::QParameter(QStringLiteral("ka"), QVector4D( 0.1, 0.1, 0.1, 0.5 ));
+    kd = new Qt3DRender::QParameter(QStringLiteral("kd"), QVector4D( 0.7, 0.7, 0.7, 0.5 ));
+    ks = new Qt3DRender::QParameter(QStringLiteral("ks"), QVector4D( 0, 0, 0, 0.5 ));
+    shininess = new Qt3DRender::QParameter(QStringLiteral("shininess"), 8);
 
     // Add parameters for material
-    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("ka"), QVector3D( 0.1, 0.1, 0.1 )));
-    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("kd"), QVector3D( 0.7, 0.7, 0.7 )));
-    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("ks"), QVector3D( 1, 1, 1 )));
-    material->addParameter(new Qt3DRender::QParameter(QStringLiteral("shininess"), 100));
+    wireframeMaterial->addParameter(ka);
+    wireframeMaterial->addParameter(kd);
+    wireframeMaterial->addParameter(ks);
+    wireframeMaterial->addParameter(shininess);
+    wireframeMaterial->addParameter(wireframeMode);
 
     // Add parameters for effect
     gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("light.position"), QVector4D( 0.0, 0.0, 0.0, 1.0 )));
-    gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("light.intensity"), QVector3D( 1.0, 1.0, 1.0 )));
+    gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("light.intensity"), QVector3D( 0.8, 0.8, 0.8 )));
     gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("line.width"), 1.0));
     gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("line.color"), QVector4D( 1.0, 1.0, 1.0, 1.0 )));
 
-    entity->addComponent(material);
 }
 

@@ -87,6 +87,8 @@ int main(int argc, char *argv[])
     mw.show();
     mw.resize(800, 600);
 
+
+
     return a.exec();
 }
 

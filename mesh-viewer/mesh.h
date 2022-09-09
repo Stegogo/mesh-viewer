@@ -21,17 +21,24 @@ public:
     Qt3DRender::QMesh *meshEntity;
     Qt3DCore::QEntity *lightEntity;
     Qt3DRender::QPointLight *light;
+
     Qt3DExtras::QPhongMaterial *material;
+    Qt3DRender::QMaterial *wireframeMaterial;
+    Qt3DRender::QEffect *wireframeEffect;
+
+    Qt3DRender::QParameter *wireframeMode;
+    Qt3DRender::QParameter *shininess;
+    Qt3DRender::QParameter *ka;
+    Qt3DRender::QParameter *kd;
+    Qt3DRender::QParameter *ks;
 
     QString getFilePath();
     void setFilePath(QString filePath);
     void setLight(Qt3DRender::QPointLight *newLight);
-    void addMaterial(Qt3DCore::QEntity *entity);
+    void addWireframeMaterial();
 
 private:
     QString meshFilePath;
-
-
 };
 
 #endif // MESH_H
