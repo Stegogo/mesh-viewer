@@ -45,6 +45,8 @@ Mesh::Mesh()
     ks = nullptr;
     lineColor = nullptr;
     lightIntensity = nullptr;
+    lightPosition = nullptr;
+    lightColor = nullptr;
     addWireframeMaterial();
 
     // Configuring mesh
@@ -134,9 +136,11 @@ void Mesh::addWireframeMaterial()
     ka = new Qt3DRender::QParameter(QStringLiteral("ka"), QVector4D( 0.1, 0.1, 0.1, 0.5 ));
     kd = new Qt3DRender::QParameter(QStringLiteral("kd"), QVector4D( 0.7, 0.7, 0.7, 0.5 ));
     ks = new Qt3DRender::QParameter(QStringLiteral("ks"), QVector4D( 0, 0, 0, 0.5 ));
-    shininess = new Qt3DRender::QParameter(QStringLiteral("shininess"), 8);
+    shininess = new Qt3DRender::QParameter(QStringLiteral("shininess"), 100);
     lineColor = new Qt3DRender::QParameter(QStringLiteral("line.color"), QVector4D( 1.0, 1.0, 1.0, 1.0 ));
     lightIntensity = new Qt3DRender::QParameter(QStringLiteral("light.intensity"), QVector3D( 0.8, 0.8, 0.8 ));
+    lightPosition = new Qt3DRender::QParameter(QStringLiteral("light.position"), QVector4D( 0.0, 0.0, 0.0, 1.0 ));
+    lightColor = new Qt3DRender::QParameter(QStringLiteral("light.color"), QVector4D( 1, 1, 1, 1));
 
     // Add parameters for material
     wireframeMaterial->addParameter(ka);
@@ -146,10 +150,11 @@ void Mesh::addWireframeMaterial()
     wireframeMaterial->addParameter(wireframeMode);
 
     // Add parameters for effect
-    gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("light.position"), QVector4D( 0.0, 0.0, 0.0, 1.0 )));
+    gl3Technique->addParameter(lightPosition);
     gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("line.width"), 1.0));
     gl3Technique->addParameter(lineColor);
     gl3Technique->addParameter(lightIntensity);
+    gl3Technique->addParameter(lightColor);
 
 }
 

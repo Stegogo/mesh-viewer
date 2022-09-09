@@ -86,7 +86,6 @@ int main(int argc, char *argv[])
     mw.setCentralWidget(splitter);
     mw.show();
     mw.resize(900, 700);
-
     return a.exec();
 }
 

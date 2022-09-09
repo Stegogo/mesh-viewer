@@ -174,7 +174,8 @@ void Sidebar::pickColor()
 
         // Update ambient color
         mesh->light->setColor(lightColor);
-        //mesh->ks->setValue(lightColor);
+        mesh->lightColor->setValue(lightColor);
+        //mesh->material->setSpecular(lightColor);
     }
     else if (QObject::sender() == diffuseColorButton)
     {
@@ -269,5 +270,3 @@ void Sidebar::setMesh(Mesh *newMesh)
 {
     mesh = newMesh;
 }
-
-

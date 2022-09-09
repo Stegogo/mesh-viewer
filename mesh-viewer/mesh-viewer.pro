@@ -11,7 +11,6 @@ CONFIG += c++11
 SOURCES += \
     appskeleton.cpp \
     camcontroller.cpp \
-    customeffect.cpp \
     main.cpp \
     mesh.cpp \
     section.cpp \
@@ -21,7 +20,6 @@ SOURCES += \
 HEADERS += \
     appskeleton.h \
     camcontroller.h \
-    customeffect.h \
     mesh.h \
     section.h \
     sidebar.h \
