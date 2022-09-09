@@ -18,7 +18,7 @@
 
 #include <Qt3DRender/QEffect>
 #include <Qt3DRender/QMaterial>
-#include <Qt3DRender/QTechnique>
+
 #include <Qt3DRender/QGraphicsApiFilter>
 #include <QtCore/QUrl>
 #include <Qt3DRender/QShaderProgram>
@@ -26,9 +26,6 @@
 
 Mesh::Mesh()
 {
-
-
-
     meshFilePath = "/home/liz/!Work/mesh-viewer/test-meshes/torus-knot.ply";
 
     // Setting 3D entities
@@ -46,6 +43,7 @@ Mesh::Mesh()
     ka = nullptr;
     kd = nullptr;
     ks = nullptr;
+    lineColor = nullptr;
     addWireframeMaterial();
 
     // Configuring mesh
@@ -54,11 +52,8 @@ Mesh::Mesh()
     rootEntity->addComponent(meshEntity);
     rootEntity->addComponent(material);
 
-
     Qt3DCore::QTransform *objectTransform = new Qt3DCore::QTransform(entity);
     rootEntity->addComponent(objectTransform);
-
-    qDebug() << rootEntity->components();
 
     lightEntity = nullptr;
     light = nullptr;
@@ -139,6 +134,7 @@ void Mesh::addWireframeMaterial()
     kd = new Qt3DRender::QParameter(QStringLiteral("kd"), QVector4D( 0.7, 0.7, 0.7, 0.5 ));
     ks = new Qt3DRender::QParameter(QStringLiteral("ks"), QVector4D( 0, 0, 0, 0.5 ));
     shininess = new Qt3DRender::QParameter(QStringLiteral("shininess"), 8);
+    lineColor = new Qt3DRender::QParameter(QStringLiteral("line.color"), QVector4D( 1.0, 1.0, 1.0, 1.0 ));
 
     // Add parameters for material
     wireframeMaterial->addParameter(ka);
@@ -151,7 +147,7 @@ void Mesh::addWireframeMaterial()
     gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("light.position"), QVector4D( 0.0, 0.0, 0.0, 1.0 )));
     gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("light.intensity"), QVector3D( 0.8, 0.8, 0.8 )));
     gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("line.width"), 1.0));
-    gl3Technique->addParameter(new Qt3DRender::QParameter(QStringLiteral("line.color"), QVector4D( 1.0, 1.0, 1.0, 1.0 )));
+    gl3Technique->addParameter(lineColor);
 
 }
 

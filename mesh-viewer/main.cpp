@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
     mw.setWindowTitle(QStringLiteral("MeshView"));
     mw.setCentralWidget(splitter);
     mw.show();
-    mw.resize(800, 600);
+    mw.resize(900, 700);
 
 
 

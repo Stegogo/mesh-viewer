@@ -7,6 +7,7 @@
 #include <Qt3DRender/QMesh>
 #include <Qt3DRender/QPointLight>
 #include <Qt3DExtras/QPhongMaterial>
+#include <Qt3DRender/QTechnique>
 
 //================================================
 // MESH CLASS
@@ -31,6 +32,7 @@ public:
     Qt3DRender::QParameter *ka;
     Qt3DRender::QParameter *kd;
     Qt3DRender::QParameter *ks;
+    Qt3DRender::QParameter *lineColor;
 
     QString getFilePath();
     void setFilePath(QString filePath);

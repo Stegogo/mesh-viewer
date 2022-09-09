@@ -15,6 +15,7 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     lightColor = Qt::white;
     diffuseColor = Qt::white;
     ambientColor = Qt::white;
+    wireframeColor = Qt::white;
 
     Section *geometrySection = new Section("Scene", 300, this);
     auto *geomLayout = new QVBoxLayout();
@@ -101,10 +102,25 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     ambientLayout->addWidget(ambientColorButton);
     viewLayout->addLayout(ambientLayout);
 
+    // Setting up wireframe color picker:
+    auto *wireframeLayout = new QHBoxLayout();
+    wireframeLayout->addWidget(new QLabel("Wireframe"));
+    // Adjust the button
+    wireframeColorButton = new QPushButton(" ");
+    wireframePallete = wireframeColorButton->palette();
+    wireframePallete.setColor(QPalette::Button, wireframeColor);
+    wireframeColorButton->setAutoFillBackground(true);
+    wireframeColorButton->setFlat(true);
+    wireframeColorButton->setPalette(wireframePallete);
+    wireframeColorButton->update();
+    wireframeLayout->addWidget(wireframeColorButton);
+    viewLayout->addLayout(wireframeLayout);
+
     // Attach color picker
     connect(lightColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
     connect(diffuseColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
     connect(ambientColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
+    connect(wireframeColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
     viewSection->setContentLayout(*viewLayout);
 
     logger = new QListWidget();
@@ -187,6 +203,18 @@ void Sidebar::pickColor()
         mesh->material->setAmbient(ambientColor);
         mesh->ka->setValue(ambientColor);
     }
+    else if (QObject::sender() == wireframeColorButton)
+    {
+        wireframeColor = newColor;
+        wireframePallete.setColor(QPalette::Button, wireframeColor);
+        wireframeColorButton->setAutoFillBackground(true);
+        wireframeColorButton->setFlat(true);
+        wireframeColorButton->setPalette(wireframePallete);
+        wireframeColorButton->update();
+
+        // Update ambient color
+        mesh->lineColor->setValue(wireframeColor);
+    }
     else
         return;
 }
@@ -218,14 +246,17 @@ void Sidebar::pickLightMode()
 void Sidebar::setLightIntensity()
 {
     mesh->light->setIntensity((float)slider->value()/10);
-    //view->getLight()->setIntensity((float)slider->value()/10);
+}
+
+const QColor &Sidebar::getWireframeColor() const
+{
+    return wireframeColor;
 }
 
 void Sidebar::setView(View3D *newView)
 {
     view = newView;
 }
-
 
 Mesh *Sidebar::getMesh() const
 {
@@ -235,7 +266,6 @@ Mesh *Sidebar::getMesh() const
 void Sidebar::setMesh(Mesh *newMesh)
 {
     mesh = newMesh;
-//    connect(mesh->meshEntity, &Qt3DRender::QMesh::sourceChanged, this, &Sidebar::logMeshStatus);
 }
 
 

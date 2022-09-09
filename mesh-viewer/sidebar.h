@@ -30,13 +30,12 @@ public:
     const QColor &getLightColor() const;
     const QColor &getDiffuseColor() const;
     const QColor &getAmbientColor() const;
+    const QColor &getWireframeColor() const;
 
     void setMesh(Mesh *newMesh);
-
-    Mesh *getMesh() const;
-
     void setView(View3D *newView);
 
+    Mesh *getMesh() const;
 private slots:
     void pickColor();
     void pickLightMode();
@@ -47,16 +46,19 @@ private:
     QColor lightColor;
     QColor diffuseColor;
     QColor ambientColor;
+    QColor wireframeColor;
 
     QPushButton * lightAsIsButton;
     QPushButton * lightFollowCameraButton;
     QPushButton * lightColorButton;
     QPushButton * diffuseColorButton;
     QPushButton * ambientColorButton;
+    QPushButton * wireframeColorButton;
 
     QPalette lightPallete;
     QPalette diffusePallete;
     QPalette ambientPallete;
+    QPalette wireframePallete;
 
     QSlider * slider;
 
