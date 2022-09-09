@@ -245,7 +245,9 @@ void Sidebar::pickLightMode()
 
 void Sidebar::setLightIntensity()
 {
-    mesh->light->setIntensity((float)slider->value()/10);
+    auto value = (float)slider->value()/10;
+    mesh->light->setIntensity(value);
+    mesh->lightIntensity->setValue(QVector3D( value, value, value ));
 }
 
 const QColor &Sidebar::getWireframeColor() const

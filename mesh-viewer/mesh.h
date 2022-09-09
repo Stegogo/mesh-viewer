@@ -33,6 +33,7 @@ public:
     Qt3DRender::QParameter *kd;
     Qt3DRender::QParameter *ks;
     Qt3DRender::QParameter *lineColor;
+    Qt3DRender::QParameter *lightIntensity;
 
     QString getFilePath();
     void setFilePath(QString filePath);
