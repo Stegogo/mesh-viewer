@@ -1,5 +1,6 @@
 #version 330 core
 
+
 uniform struct LightInfo {
     vec4 position;
     vec3 intensity;
@@ -18,7 +19,7 @@ uniform float shininess;    // Specular shininess factor
 
 uniform int mode;           // 1 to render lines only
                             // 2 to render the inside of mesh
-
+flat in vec3 vViewPos;
 in WireframeVertex {
     vec3 position;
     vec3 normal;
@@ -28,6 +29,15 @@ in WireframeVertex {
 } fs_in;
 
 out vec4 fragColor;
+uniform sampler2D texture1;
+vec3 normals(vec3 pos)
+{
+    vec3 fdx = dFdx(pos);
+    vec3 fdy = dFdy(pos);
+    return normalize(cross(fdx, fdy));
+}
+
+flat in vec4 polygon_color;
 
 vec3 adsModel( const in vec3 pos, const in vec3 n )
 {
@@ -48,7 +58,6 @@ vec3 adsModel( const in vec3 pos, const in vec3 n )
     vec3 specular = vec3( pow( max( dot( r, v ), 0.0 ), shininess ) );
 
     // Combine the ambient, diffuse and specular contributions
-    //return light.intensity * ( kd + ka * diffuse + ks * specular );
     return light.intensity * ( (kd * diffuse) + (ks * specular) + ka);
 }
 
@@ -115,9 +124,16 @@ vec4 shadeLine( const in vec4 color )
     return mix( color, line.color, mixVal );
 }
 
+
+
 void main()
 {
+    vec3 normal = normals(vViewPos);
+    float theta = dot(normal, vec3( light.position ) / length(normal));
+    vec3 gray = vec3(0.9, 0.9, 0.9);
+
     // Calculate the color from the phong model
     vec4 color = vec4( adsModel( fs_in.position, normalize( fs_in.normal )), 1.0)  * light.color;
-    fragColor = shadeLine( color );
+    fragColor = shadeLine( color ) ;
+    //fragColor = vec4(gray * theta, 1.0);
 }

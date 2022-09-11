@@ -8,6 +8,9 @@
 #include <QPalette>
 #include <QSlider>
 
+#include <Qt3DRender/QEffect>
+#include <Qt3DRender/QMaterial>
+
 Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
 {
     m_layout = new QVBoxLayout();
@@ -23,12 +26,12 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
 
     // Light mode select section
     auto *lightModeLayout = new QHBoxLayout();
-    geomLayout->addWidget(new QLabel("Light mode", geometrySection));
+    geomLayout->addWidget(new QLabel("Shading mode", geometrySection));
 
     // Set up light mode buttons
-    lightAsIsButton = new QPushButton("As-is");
+    lightAsIsButton = new QPushButton("Flat");
     lightModeLayout->addWidget(lightAsIsButton);
-    lightFollowCameraButton = new QPushButton("Camera");
+    lightFollowCameraButton = new QPushButton("Smooths");
     lightModeLayout->addWidget(lightFollowCameraButton);
     lightFollowCameraButton->setDown(true);
 
@@ -206,11 +209,8 @@ void Sidebar::pickColor()
         diffuseColorButton->update();
 
         // Update diffuse color
-        mesh->material->setDiffuse(diffuseColor);
+        //mesh->material->setDiffuse(diffuseColor);
         mesh->kd->setValue(diffuseColor);
-
-        qDebug() << "diffuse" << mesh->material->diffuse();
-        qDebug() << "diffuse" << mesh->kd->value();
 
     }
     else if (QObject::sender() == ambientColorButton)
@@ -223,13 +223,8 @@ void Sidebar::pickColor()
         ambientColorButton->update();
 
         // Update ambient color
-        mesh->material->setAmbient(ambientColor);
+        //mesh->material->setAmbient(ambientColor);
         mesh->ka->setValue(ambientColor);
-
-        qDebug() << "ambient" <<mesh->material->ambient();
-        qDebug() << "ambient" << mesh->ka->value();
-        qDebug() << "diffuse" << mesh->material->diffuse();
-        qDebug() << "diffuse" << mesh->kd->value();
     }
     else if (QObject::sender() == specularColorButton)
     {
@@ -241,7 +236,7 @@ void Sidebar::pickColor()
         specularColorButton->update();
 
         // Update specular color
-        mesh->material->setSpecular(specularColor);
+        //mesh->material->setSpecular(specularColor);
         mesh->ks->setValue(specularColor);
     }
     else if (QObject::sender() == wireframeColorButton)
@@ -267,18 +262,24 @@ void Sidebar::pickLightMode()
     if (QObject::sender() == lightAsIsButton)
     {
         //Qt3DCore::QEntity * rootEntity = new Qt3DCore::QEntity;
-        view->getLightEntity()->setParent(view->rootEntity);
+        //view->getLightEntity()->setParent(view->rootEntity);
 
-        mesh->lightEntity = view->getLightEntity();
-        mesh->setLight(view->getLight());
-        view->getLight()->setColor(lightColor);
+//        mesh->lightEntity = view->getLightEntity();
+//        mesh->setLight(view->getLight());
+//        view->getLight()->setColor(lightColor);
+
+//        mesh->rootEntity->removeComponent(mesh->wireframeMaterial);
+//        mesh->rootEntity->addComponent(mesh->faceShadingMaterial);
         lightFollowCameraButton->setDown(false);
         lightAsIsButton->setDown(true);
     }
     if (QObject::sender() == lightFollowCameraButton)
     {
-        view->getLightEntity()->setParent((Qt3DCore::QEntity *)view->getCamera());
-        mesh->setLight(view->getLight());
+//        view->getLightEntity()->setParent((Qt3DCore::QEntity *)view->getCamera());
+//        mesh->setLight(view->getLight());
+//        mesh->rootEntity->removeComponent(mesh->faceShadingMaterial);
+//        mesh->rootEntity->addComponent(mesh->wireframeMaterial);
+        //mesh->wireframeEffect->techniques().back()->
         lightFollowCameraButton->setDown(true);
         lightAsIsButton->setDown(false);
     }

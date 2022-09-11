@@ -7,15 +7,19 @@ out EyeSpaceVertex {
     vec3 position;
     vec3 normal;
 } vs_out;
+out vec3 vViewPos;
 
 uniform mat4 modelView;
 uniform mat3 modelViewNormal;
 uniform mat4 mvp;
 
+
 void main()
 {
+    vec4 pos = vec4(vertexPosition, 1.0);
+    vec4 mpos = modelView * pos;
     vs_out.normal = normalize( modelViewNormal * vertexNormal );
     vs_out.position = vec3( modelView * vec4( vertexPosition, 1.0 ) );
-
+    vViewPos = -mpos.xyz;
     gl_Position = mvp * vec4( vertexPosition, 1.0 );
 }

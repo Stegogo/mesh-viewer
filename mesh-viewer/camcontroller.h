@@ -50,6 +50,7 @@ private:
     Qt3DInput::QAction *m_keyLeftAction;
     Qt3DInput::QAction *m_keyRightAction;
     Qt3DInput::QAction *m_leftMouseAction;
+    Qt3DInput::QAction *m_rightMouseAction;
     Qt3DInput::QAction *m_wheelInAction;
     Qt3DInput::QAction *m_wheelOutAction;
 
@@ -58,6 +59,7 @@ private:
     Qt3DInput::QActionInput *m_keyLeftInput;
     Qt3DInput::QActionInput *m_keyRightInput;
     Qt3DInput::QActionInput *m_leftMouseInput;
+    Qt3DInput::QActionInput *m_rightMouseInput;
     Qt3DInput::QActionInput *m_wheelInInput;
     Qt3DInput::QActionInput *m_wheelOutInput;
 
@@ -82,6 +84,7 @@ private:
     bool m_keyLeftPressed;
     bool m_keyRightPressed;
     bool m_leftMousePressed;
+    bool m_rightMousePressed;
     bool m_wheelInRoll;
     bool m_wheelOutRoll;
 

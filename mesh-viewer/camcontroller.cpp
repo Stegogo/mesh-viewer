@@ -11,6 +11,7 @@ CamController::CamController(Qt3DCore::QNode *parent)
     m_keyRightPressed = false;
 
     m_leftMousePressed = false;
+    m_rightMousePressed = false;
     m_wheelInRoll = false;
     m_wheelOutRoll = false;
 
@@ -30,6 +31,7 @@ CamController::CamController(Qt3DCore::QNode *parent)
     m_keyLeftAction = new Qt3DInput::QAction(this);
     m_keyRightAction = new Qt3DInput::QAction(this);
     m_leftMouseAction = new Qt3DInput::QAction(this);
+    m_rightMouseAction = new Qt3DInput::QAction(this);
     m_wheelInAction = new Qt3DInput::QAction(this);
     m_wheelOutAction = new Qt3DInput::QAction(this);
 
@@ -38,6 +40,7 @@ CamController::CamController(Qt3DCore::QNode *parent)
     m_keyLeftInput = new Qt3DInput::QActionInput(this);
     m_keyRightInput = new Qt3DInput::QActionInput(this);
     m_leftMouseInput = new Qt3DInput::QActionInput(this);
+    m_rightMouseInput = new Qt3DInput::QActionInput(this);
     m_wheelInInput = new Qt3DInput::QActionInput(this);
     m_wheelOutInput = new Qt3DInput::QActionInput(this);
 
@@ -84,6 +87,12 @@ CamController::CamController(Qt3DCore::QNode *parent)
     m_leftMouseAction->addInput(m_leftMouseInput);
     m_leftMouseAction->setObjectName("Mouse_Left");
 
+    // Setting up LMB action
+    m_rightMouseInput->setButtons(QVector<int>() << Qt::RightButton);
+    m_rightMouseInput->setSourceDevice(m_mouseDevice);
+    m_rightMouseAction->addInput(m_rightMouseInput);
+    m_rightMouseAction->setObjectName("Mouse_Right");
+
     //!==============REQUIRES REFACTOR========================
     // Setting up mouse wheel action ZOOM IN
     m_wheelInInput->setButtons(QVector<int>() << Qt::Key_Equal);
@@ -116,6 +125,7 @@ CamController::CamController(Qt3DCore::QNode *parent)
     m_logicalDevice->addAction(m_keyLeftAction);
     m_logicalDevice->addAction(m_keyRightAction);
     m_logicalDevice->addAction(m_leftMouseAction);
+    m_logicalDevice->addAction(m_rightMouseAction);
     m_logicalDevice->addAction(m_wheelInAction);
     m_logicalDevice->addAction(m_wheelOutAction);
     m_logicalDevice->addAxis(m_xAxis);
@@ -127,6 +137,7 @@ CamController::CamController(Qt3DCore::QNode *parent)
     connect(m_keyLeftAction, SIGNAL(activeChanged(bool)), this, SLOT(activeChanged(bool)));
     connect(m_keyRightAction, SIGNAL(activeChanged(bool)), this, SLOT(activeChanged(bool)));
     connect(m_leftMouseAction, SIGNAL(activeChanged(bool)), this, SLOT(activeChanged(bool)));
+    connect(m_rightMouseAction, SIGNAL(activeChanged(bool)), this, SLOT(activeChanged(bool)));
     connect(m_wheelInAction, SIGNAL(activeChanged(bool)), this, SLOT(activeChanged(bool)));
     connect(m_wheelOutAction, SIGNAL(activeChanged(bool)), this, SLOT(activeChanged(bool)));
     connect(m_xAxis, SIGNAL(valueChanged(float)), this, SLOT(axisValueChanged(float)));
@@ -172,6 +183,8 @@ void CamController::activeChanged(bool isActive)
         m_keyRightPressed = isActive;
     if (sender()->objectName() == "Mouse_Left")
         m_leftMousePressed = isActive;
+    if (sender()->objectName() == "Mouse_Right")
+        m_rightMousePressed = isActive;
     if (sender()->objectName() == "Wheel_In")
         m_wheelInRoll = isActive;
     if (sender()->objectName() == "Wheel_Out")
@@ -196,6 +209,12 @@ void CamController::frameActionTriggered(float dt)
     {
         m_camera->panAboutViewCenter(-m_dX * m_lookSpeed * dt);
         m_camera->tiltAboutViewCenter(-m_dY * m_lookSpeed * dt);
+    }
+    if (m_rightMousePressed)
+    {
+//        m_camera->pan((-m_dX * m_lookSpeed * dt) / 300);
+//        m_camera->tilt((-m_dY * m_lookSpeed * dt) / 300);
+         m_camera->viewAll();
     }
     if (m_keyUpPressed)
         m_camera->tiltAboutViewCenter(0.5 * m_lookSpeed * dt);
