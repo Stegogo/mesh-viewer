@@ -30,10 +30,13 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
 
     // Set up light mode buttons
     shadeFlatButton = new QPushButton("Flat");
+    shadeFlatButton->setCheckable(true);
     lightModeLayout->addWidget(shadeFlatButton);
+
     shadeSmoothButton = new QPushButton("Smooth");
+    shadeSmoothButton->setCheckable(true);
+    shadeSmoothButton->setChecked(true);
     lightModeLayout->addWidget(shadeSmoothButton);
-    shadeSmoothButton->setDown(true);
 
     geomLayout->addLayout(lightModeLayout);
 
@@ -81,6 +84,7 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     lightColorButton->setFlat(true);
     lightColorButton->setPalette(lightPallete);
     lightColorButton->update();
+
     lightLayout->addWidget(lightColorButton);
     viewLayout->addLayout(lightLayout);
 
@@ -249,15 +253,15 @@ void Sidebar::pickLightMode()
     {
         // Set flat shading
         mesh->glShader->setVertexShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/wireframeFlat.vert"))));
-        shadeSmoothButton->setDown(false);
-        shadeFlatButton->setDown(true);
+        shadeSmoothButton->setChecked(false);
+        shadeFlatButton->setChecked(true);
     }
     if (QObject::sender() == shadeSmoothButton)
     {
         // Set smooth shading
         mesh->glShader->setVertexShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/wireframe.vert"))));
-        shadeSmoothButton->setDown(true);
-        shadeFlatButton->setDown(false);
+        shadeSmoothButton->setChecked(true);
+        shadeFlatButton->setChecked(false);
     }
 }
 
@@ -271,7 +275,6 @@ void Sidebar::setLightIntensity()
 void Sidebar::setLineWidth()
 {
     auto value = (float)sliderLine->value()/10;
-    //mesh->lightIntensity->setValue(QVector3D( value, value, value ));
     mesh->lineWidth->setValue(value);
 }
 

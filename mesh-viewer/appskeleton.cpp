@@ -52,6 +52,13 @@ AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
     quitTool->setShortcut(tr("CTRL+Q"));
     openTool->setShortcut(tr("CTRL+O"));
 
+    // Set checked status for buttons
+    wireframeTool->setCheckable(true);
+    wireframeFaceTool->setCheckable(true);
+    faceTool->setCheckable(true);
+    faceTool->setChecked(true);
+
+    // Connect to methods
     connect(newTool, &QAction::triggered, this, &AppSkeleton::newScene);
     connect(openTool, &QAction::triggered, this, &AppSkeleton::openFileDialog);
     connect(wireframeTool, &QAction::triggered, this, &AppSkeleton::wireframeMode);
@@ -132,11 +139,29 @@ void AppSkeleton::wireframeMode()
 {
     // Wireframe ONLY
     if (QObject::sender() == wireframeTool)
+    {
         view->getMesh()->wireframeMode->setValue(1);
+
+        wireframeTool->setChecked(true);
+        wireframeFaceTool->setChecked(false);
+        faceTool->setChecked(false);
+    }
     // Wireframe + Face
     else if (QObject::sender() == wireframeFaceTool)
+    {
         view->getMesh()->wireframeMode->setValue(2);
+
+        wireframeTool->setChecked(false);
+        wireframeFaceTool->setChecked(true);
+        faceTool->setChecked(false);
+    }
     // Face ONLY
     else if (QObject::sender() == faceTool)
+    {
         view->getMesh()->wireframeMode->setValue(0);
+
+        wireframeTool->setChecked(false);
+        wireframeFaceTool->setChecked(false);
+        faceTool->setChecked(true);
+    }
 }
