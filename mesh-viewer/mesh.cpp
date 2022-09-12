@@ -48,6 +48,7 @@ Mesh::Mesh()
     // Register default material
     wireframeMaterial = nullptr;
     wireframeEffect = nullptr;
+    glShader = nullptr;
     addWireframeMaterial();
 
     // Configuring mesh
@@ -84,7 +85,6 @@ void Mesh::setLight(Qt3DRender::QPointLight *newLight)
 
 void Mesh::addWireframeMaterial()
 {
-
     //not sure abt this
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable( GL_BLEND );
@@ -97,6 +97,8 @@ void Mesh::addWireframeMaterial()
     glShadeModel(GL_SMOOTH);
     glEnable(GL_LIGHTING);
 
+    //glEnableVertexAttribArray(0);
+
     // Create custom material
     wireframeMaterial = new Qt3DRender::QMaterial();
 
@@ -104,7 +106,7 @@ void Mesh::addWireframeMaterial()
     wireframeEffect = new Qt3DRender::QEffect();
     Qt3DRender::QTechnique *gl3Technique = new Qt3DRender::QTechnique();
     Qt3DRender::QRenderPass *gl3Pass = new Qt3DRender::QRenderPass();
-    Qt3DRender::QShaderProgram *glShader = new Qt3DRender::QShaderProgram();
+    glShader = new Qt3DRender::QShaderProgram();
 
     // Connect shader code
     glShader->setVertexShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/wireframe.vert"))));
@@ -163,6 +165,6 @@ void Mesh::addWireframeMaterial()
     gl3Technique->addParameter(lineColor);
     gl3Technique->addParameter(lightIntensity);
     gl3Technique->addParameter(lightColor);
-
+    wireframeMaterial->addParameter(new Qt3DRender::QParameter(QStringLiteral("shade"), 1));
 }
 

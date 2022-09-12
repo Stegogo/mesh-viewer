@@ -45,11 +45,17 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     sliderLight->setMaximum(10);
     sliderLight->setSingleStep(1);
     sliderLight->setSliderPosition(8);
-
-//    QLabel * label = new QLabel("8", this);
-//    geomLayout->addWidget(label);
-//    connect(sliderLight, &QSlider::valueChanged, label, static_cast<void (QLabel::*)(int)>(&QLabel::setNum));
     connect(sliderLight, &QSlider::valueChanged, this, &Sidebar::setLightIntensity);
+
+    // Light intensity slider
+    geomLayout->addWidget(new QLabel("Line width", geometrySection));
+    sliderLine = new QSlider(Qt::Horizontal , this);
+    geomLayout->addWidget(sliderLine);
+    sliderLine->setMinimum(0);
+    sliderLine->setMaximum(20);
+    sliderLine->setSingleStep(1);
+    sliderLine->setSliderPosition(10);
+    connect(sliderLine, &QSlider::valueChanged, this, &Sidebar::setLineWidth);
 
     geometrySection->setContentLayout(*geomLayout);
 
@@ -142,20 +148,6 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     connect(wireframeColorButton, SIGNAL(clicked()), this, SLOT(pickColor()));
     viewSection->setContentLayout(*viewLayout);
 
-    // Light intensity slider
-    viewLayout->addWidget(new QLabel("Line width", viewSection));
-    sliderLine = new QSlider(Qt::Horizontal , this);
-    viewLayout->addWidget(sliderLine);
-    sliderLine->setMinimum(0);
-    sliderLine->setMaximum(20);
-    sliderLine->setSingleStep(1);
-    sliderLine->setSliderPosition(10);
-
-//    QLabel * label2 = new QLabel("10", this);
-//    viewLayout->addWidget(label2);
-//    connect(sliderLine, &QSlider::valueChanged, label2, static_cast<void (QLabel::*)(int)>(&QLabel::setNum));
-    connect(sliderLine, &QSlider::valueChanged, this, &Sidebar::setLineWidth);
-
     logger = new QListWidget();
 
     m_layout->addWidget(geometrySection);
@@ -194,9 +186,6 @@ void Sidebar::pickColor()
         // Update ambient color
         mesh->light->setColor(lightColor);
         mesh->lightColor->setValue(lightColor);
-
-        qDebug() << "light" << mesh->light->color();
-        qDebug() << "light" << mesh->lightColor->value();
 
     }
     else if (QObject::sender() == diffuseColorButton)
@@ -261,25 +250,15 @@ void Sidebar::pickLightMode()
 {
     if (QObject::sender() == lightAsIsButton)
     {
-        //Qt3DCore::QEntity * rootEntity = new Qt3DCore::QEntity;
-        //view->getLightEntity()->setParent(view->rootEntity);
-
-//        mesh->lightEntity = view->getLightEntity();
-//        mesh->setLight(view->getLight());
-//        view->getLight()->setColor(lightColor);
-
-//        mesh->rootEntity->removeComponent(mesh->wireframeMaterial);
-//        mesh->rootEntity->addComponent(mesh->faceShadingMaterial);
+        // Set flat shading
+        mesh->glShader->setVertexShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/wireframeFlat.vert"))));
         lightFollowCameraButton->setDown(false);
         lightAsIsButton->setDown(true);
     }
     if (QObject::sender() == lightFollowCameraButton)
     {
-//        view->getLightEntity()->setParent((Qt3DCore::QEntity *)view->getCamera());
-//        mesh->setLight(view->getLight());
-//        mesh->rootEntity->removeComponent(mesh->faceShadingMaterial);
-//        mesh->rootEntity->addComponent(mesh->wireframeMaterial);
-        //mesh->wireframeEffect->techniques().back()->
+        // Set smooth shading
+        mesh->glShader->setVertexShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/wireframe.vert"))));
         lightFollowCameraButton->setDown(true);
         lightAsIsButton->setDown(false);
     }

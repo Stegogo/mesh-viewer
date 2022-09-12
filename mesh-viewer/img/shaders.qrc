@@ -1,10 +1,9 @@
 <RCC>
     <qresource prefix="/shaders">
-        <file>face-shading.vert</file>
-        <file>face-shading.frag</file>
         <file>wireframe.frag</file>
         <file>wireframe.vert</file>
         <file>wireframe.geom</file>
+        <file>wireframeFlat.vert</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

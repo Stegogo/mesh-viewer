@@ -25,11 +25,9 @@ public:
     Qt3DRender::QPointLight *light;
     Qt3DCore::QTransform *transform;
 
-    //Qt3DExtras::QPhongMaterial *material;
     Qt3DRender::QMaterial *wireframeMaterial;
     Qt3DRender::QEffect *wireframeEffect;
-//    Qt3DRender::QEffect *faceShadingEffect;
-//    Qt3DRender::QMaterial *faceShadingMaterial;
+    Qt3DRender::QShaderProgram *glShader;
 
     Qt3DRender::QParameter *wireframeMode;
     Qt3DRender::QParameter *shininess;

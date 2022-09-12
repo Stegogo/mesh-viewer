@@ -6,6 +6,7 @@ layout( triangle_strip, max_vertices = 3 ) out;
 in EyeSpaceVertex {
     vec3 position;
     vec3 normal;
+    int shade;
 } gs_in[];
 
 out WireframeVertex {
@@ -28,11 +29,16 @@ vec2 transformToViewport( const in vec4 p )
     return vec2( viewportMatrix * ( p / p.w ) );
 }
 
+// if mode == 4, draw flat shading based on vertex C of each triangle
+// if mode != 4, draw smooth shading
+//in int mode;
+
 void main()
 {
     gs_out.configuration = int(gl_in[0].gl_Position.z < 0) * int(4)
            + int(gl_in[1].gl_Position.z < 0) * int(2)
            + int(gl_in[2].gl_Position.z < 0);
+    int shade = gs_in[0].shade;
 
     // If all vertices are behind us, cull the primitive
     if (gs_out.configuration == 7)
@@ -69,6 +75,9 @@ void main()
 
         // Vertex 0 (a)
         gs_out.edgeA = vec4( ha, 0.0, 0.0, 0.0 );
+        if (shade == 1)
+            gs_out.normal = gs_in[2].normal;
+        else
         gs_out.normal = gs_in[0].normal;
         gs_out.position = gs_in[0].position;
         gl_Position = gl_in[0].gl_Position;
@@ -76,6 +85,9 @@ void main()
 
         // Vertex 1 (b)
         gs_out.edgeA = vec4( 0.0, hb, 0.0, 0.0 );
+        if (shade == 1)
+            gs_out.normal = gs_in[2].normal;
+        else
         gs_out.normal = gs_in[1].normal;
         gs_out.position = gs_in[1].position;
         gl_Position = gl_in[1].gl_Position;
