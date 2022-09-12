@@ -8,6 +8,7 @@
 #include <Qt3DRender/QPointLight>
 #include <Qt3DExtras/QPhongMaterial>
 #include <Qt3DRender/QTechnique>
+#include <Qt3DCore/QTransform>
 
 //================================================
 // MESH CLASS
@@ -22,6 +23,7 @@ public:
     Qt3DRender::QMesh *meshEntity;
     Qt3DCore::QEntity *lightEntity;
     Qt3DRender::QPointLight *light;
+    Qt3DCore::QTransform *transform;
 
     //Qt3DExtras::QPhongMaterial *material;
     Qt3DRender::QMaterial *wireframeMaterial;

@@ -49,11 +49,32 @@ void View3D::setWidget(QWidget *newContainer)
 }
 void View3D::wheelEvent(QWheelEvent* event)
 {
-    if(m_camera->fieldOfView() >= 0.1)
-        m_camera->setFieldOfView(m_camera->fieldOfView() - event->delta() / 300.f);
-    else
-        m_camera->setFieldOfView(0.1);
+    //!-----deprecated------
+        if(m_camera->fieldOfView() >= 0.1)
+            m_camera->setFieldOfView(m_camera->fieldOfView() - event->delta() / 300.f);
+        else
+            m_camera->setFieldOfView(0.1);
+//        if (event->delta() < 0);
 
+    //!--------new----------
+//    mesh->transform->setScale(mesh->transform->scale() - event->delta() / 300.f);
+////    if(mesh->transform->scale() <= 0)
+////        mesh->transform->setScale(0.1);
+//    qDebug() << mesh->transform->scale();
+}
+
+//void View3D::resizeEvent(QResizeEvent *event)
+//{
+//    qDebug() << m_container->size();
+//    centerMesh();
+//}
+
+void View3D::centerMesh()
+{
+    // Center of the 3D Widget = (widgetWidth/2, widgetHeight/2)
+    QVector3D position(m_container->width() / 2, m_container->height()/2, 0);
+
+    mesh->transform->rotateAround(position, 0, QVector3D(0, 0, 0));
 }
 
 Mesh *View3D::getMesh() const

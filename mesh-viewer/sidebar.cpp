@@ -31,7 +31,7 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     // Set up light mode buttons
     lightAsIsButton = new QPushButton("Flat");
     lightModeLayout->addWidget(lightAsIsButton);
-    lightFollowCameraButton = new QPushButton("Smooths");
+    lightFollowCameraButton = new QPushButton("Smooth");
     lightModeLayout->addWidget(lightFollowCameraButton);
     lightFollowCameraButton->setDown(true);
 

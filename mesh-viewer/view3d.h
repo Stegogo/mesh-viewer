@@ -40,6 +40,8 @@ protected:
     void wheelEvent(QWheelEvent *event);
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
+    //void resizeEvent(QResizeEvent *event);
+    void centerMesh();
 protected slots:
     void resetFOV();
 private:

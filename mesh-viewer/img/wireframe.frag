@@ -41,6 +41,10 @@ flat in vec4 polygon_color;
 
 vec3 adsModel( const in vec3 pos, const in vec3 n )
 {
+
+    vec3 normal = normals(vViewPos);
+    float theta = dot(normal, vec3( pos ) / n);
+
     // Calculate the vector from the light to the fragment
     vec3 s = normalize( vec3( light.position ) - pos );
 
@@ -58,7 +62,7 @@ vec3 adsModel( const in vec3 pos, const in vec3 n )
     vec3 specular = vec3( pow( max( dot( r, v ), 0.0 ), shininess ) );
 
     // Combine the ambient, diffuse and specular contributions
-    return light.intensity * ( (kd * diffuse) + (ks * specular) + ka);
+    return light.intensity *( (kd * diffuse) + (ks * specular) + ka);
 }
 
 vec4 shadeLine( const in vec4 color )

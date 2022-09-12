@@ -21,7 +21,7 @@
 #include <Qt3DInput/QInputAspect>               // for 3D input                 
 #include <QSplitter>                            // for sidebar splitter
 #include <QSizeGrip>                            // for resizing the sidebar
-
+#include <QDebug>
 //#include <QtDataVisualization>
 //#include <Q3DSurface>
 #include <Qt3DExtras/QText2DEntity>
