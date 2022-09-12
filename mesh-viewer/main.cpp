@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 {
     QGuiApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
     QApplication a(argc, argv);
-
+    a.setWindowIcon(QIcon(":/img/meshlogo.ico"));
 
     AppSkeleton mw;
 

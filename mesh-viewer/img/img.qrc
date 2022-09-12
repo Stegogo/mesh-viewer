@@ -7,5 +7,6 @@
         <file>icon-wireframe-face.png</file>
         <file>icon-bevel-shading.png</file>
         <file>icon-face.png</file>
+        <file>meshlogo.ico</file>
     </qresource>
 </RCC>
