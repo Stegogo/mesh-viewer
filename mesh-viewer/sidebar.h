@@ -52,8 +52,8 @@ private:
     QColor specularColor;
     QColor wireframeColor;
 
-    QPushButton * lightAsIsButton;
-    QPushButton * lightFollowCameraButton;
+    QPushButton * shadeFlatButton;
+    QPushButton * shadeSmoothButton;
     QPushButton * lightColorButton;
     QPushButton * diffuseColorButton;
     QPushButton * ambientColorButton;

@@ -29,11 +29,11 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     geomLayout->addWidget(new QLabel("Shading mode", geometrySection));
 
     // Set up light mode buttons
-    lightAsIsButton = new QPushButton("Flat");
-    lightModeLayout->addWidget(lightAsIsButton);
-    lightFollowCameraButton = new QPushButton("Smooth");
-    lightModeLayout->addWidget(lightFollowCameraButton);
-    lightFollowCameraButton->setDown(true);
+    shadeFlatButton = new QPushButton("Flat");
+    lightModeLayout->addWidget(shadeFlatButton);
+    shadeSmoothButton = new QPushButton("Smooth");
+    lightModeLayout->addWidget(shadeSmoothButton);
+    shadeSmoothButton->setDown(true);
 
     geomLayout->addLayout(lightModeLayout);
 
@@ -60,8 +60,8 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     geometrySection->setContentLayout(*geomLayout);
 
     // Attach actions
-    connect(lightAsIsButton, SIGNAL(clicked()), this, SLOT(pickLightMode()));
-    connect(lightFollowCameraButton, SIGNAL(clicked()), this, SLOT(pickLightMode()));
+    connect(shadeFlatButton, SIGNAL(clicked()), this, SLOT(pickLightMode()));
+    connect(shadeSmoothButton, SIGNAL(clicked()), this, SLOT(pickLightMode()));
 
     //---------------------------
 
@@ -198,7 +198,6 @@ void Sidebar::pickColor()
         diffuseColorButton->update();
 
         // Update diffuse color
-        //mesh->material->setDiffuse(diffuseColor);
         mesh->kd->setValue(diffuseColor);
 
     }
@@ -212,7 +211,6 @@ void Sidebar::pickColor()
         ambientColorButton->update();
 
         // Update ambient color
-        //mesh->material->setAmbient(ambientColor);
         mesh->ka->setValue(ambientColor);
     }
     else if (QObject::sender() == specularColorButton)
@@ -225,7 +223,6 @@ void Sidebar::pickColor()
         specularColorButton->update();
 
         // Update specular color
-        //mesh->material->setSpecular(specularColor);
         mesh->ks->setValue(specularColor);
     }
     else if (QObject::sender() == wireframeColorButton)
@@ -248,19 +245,19 @@ void Sidebar::pickColor()
 // Picking and updating lighting modes
 void Sidebar::pickLightMode()
 {
-    if (QObject::sender() == lightAsIsButton)
+    if (QObject::sender() == shadeFlatButton)
     {
         // Set flat shading
         mesh->glShader->setVertexShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/wireframeFlat.vert"))));
-        lightFollowCameraButton->setDown(false);
-        lightAsIsButton->setDown(true);
+        shadeSmoothButton->setDown(false);
+        shadeFlatButton->setDown(true);
     }
-    if (QObject::sender() == lightFollowCameraButton)
+    if (QObject::sender() == shadeSmoothButton)
     {
         // Set smooth shading
         mesh->glShader->setVertexShaderCode(Qt3DRender::QShaderProgram::loadSource(QUrl(QStringLiteral("qrc:/shaders/wireframe.vert"))));
-        lightFollowCameraButton->setDown(true);
-        lightAsIsButton->setDown(false);
+        shadeSmoothButton->setDown(true);
+        shadeFlatButton->setDown(false);
     }
 }
 
