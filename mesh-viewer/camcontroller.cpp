@@ -18,7 +18,7 @@ CamController::CamController(Qt3DCore::QNode *parent)
     m_dX = 0;
     m_dY = 0;
     m_zoom = 20;
-    m_lookSpeed = 900;
+    m_lookSpeed = 400;
     m_linearSpeed = 100;
     m_camera = nullptr;
 
