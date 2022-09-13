@@ -24,16 +24,17 @@ This is a basic mesh viewer made with Qt on C++ that allows you to display 3D me
 
 ## Features
 <p align="center">
-MeshViewer allows you to view 3D objects of .ply, .obj & .stl formats. You can adjust various color properties of the object. You can set the lighting, diffuse, ambient and specular colors. MeshViewer allows you to render 3D objects in "Face only", "Face + Wireframe" and "Wireframe" mods, with modifiable wireframe line width & color:
+MeshViewer allows you to display 3D objects of .ply, .obj & .stl formats. You can adjust various color properties of the object. You can set the lighting, diffuse, ambient and specular colors. MeshViewer allows you to render 3D objects in "Face only", "Face + Wireframe" and "Wireframe" mods, with modifiable wireframe line width & color:
   <p align="center">
     <img src="readme/modes-face.png" alt="Face only" width="300" height="250">
     <img src="readme/modes-facewf.png" alt="Face + Wireframe" width="300" height="250">
     <img src="readme/modes-wf.png" alt="Wireframe only" width="300" height="250">
+    <img src="readme/linewidth.gif" alt="Face only" width="330" height="250">
   </p>
   <p align="center">
-    <img src="readme/linewidth.gif" alt="Face only" width="420" height="300">
+    
   </p>
-MeshViewer allows you to change between flat and smooth shading modes with adjustable light intensity
+MeshViewer has an option for you to change between flat and smooth shading modes with adjustable light intensity. 
   <p align="center">
     <img src="readme/shading-flat.png" alt="Face only" width="300" height="250">
     <img src="readme/shading-smooth.png" alt="Face + Wireframe" width="300" height="250">
