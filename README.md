@@ -11,7 +11,7 @@
       ·
       <a href="#controls">Controls</a>
       ·
-      <a href="#features">Installation</a>
+      <a href="#installation">Installation</a>
     </p>
 </p>
 <hr height="1">
