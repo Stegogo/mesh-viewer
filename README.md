@@ -28,16 +28,20 @@ MeshViewer allows you to display 3D objects of .ply, .obj & .stl formats. You ca
   <p align="center">
     <img src="readme/modes-face.png" alt="Face only" width="300" height="250">
     <img src="readme/modes-facewf.png" alt="Face + Wireframe" width="300" height="250">
-    <img src="readme/modes-wf.png" alt="Wireframe only" width="300" height="250">
-    <img src="readme/linewidth.gif" alt="Face only" width="330" height="250">
+    <img src="readme/modes-wf.png" alt="Wireframe only" width="300" height="250">    
   </p>
   <p align="center">
-    
+    <img src="readme/linewidth.gif" alt="Face only" width="420" height="300">
   </p>
-MeshViewer has an option for you to change between flat and smooth shading modes with adjustable light intensity. 
-  <p align="center">
-    <img src="readme/shading-flat.png" alt="Face only" width="300" height="250">
-    <img src="readme/shading-smooth.png" alt="Face + Wireframe" width="300" height="250">
+  <p>
+  MeshViewer has an option for you to change between flat and smooth shading modes with adjustable light intensity. This is achieved via computing normals  in slightly different ways in the fragment shader 
+  </p>
+    <p align="center">
+      <img src="readme/shading-flat.png" alt="Face only" width="300" height="250">
+      <img src="readme/shading-smooth.png" alt="Face + Wireframe" width="300" height="250">
+    </p>
+  <p>
+  This project uses Qt 5.12 for user interface, and OpenGL for graphical effects. MeshViewer includes the custom camera controller class, a mesh class with custom material, and GLSL shaders for custom effects (wireframe + flat shading). Custom features were implemented for the sake of better flexibility of the program. 
   </p>
 </p>
 
