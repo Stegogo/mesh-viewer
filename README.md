@@ -41,12 +41,13 @@ MeshViewer allows you to display 3D objects of .ply, .obj & .stl formats. You ca
       <img src="readme/shading-smooth.png" alt="Face + Wireframe" width="300" height="250">
     </p>
   <p>
-  This project uses Qt 5.12 for user interface, and OpenGL for graphical effects. MeshViewer includes the custom camera controller class, a mesh class with custom material, and GLSL shaders for custom effects (wireframe + flat shading). Custom features were implemented for the sake of better flexibility of the program. 
+  This project uses Qt 5.12 for user interface, and OpenGL for graphical effects. MeshViewer includes the custom camera controller class, a mesh class with custom material, and GLSL shaders for custom effects (wireframe + flat shading). Custom features were implemented for the sake of better flexibility of the program. In the "test-meshes" directory you can find some basic models that you can display in the program, but anything of the .ply, .obj, and .stl format will be ok as well. 
   </p>
 </p>
 
 ## Controls
 <p align="center">
+  <p>Left Mouse Button : Rotate mesh</p>
   <p>W/S || ⇧/⇩	: Rotate mesh (z axis)</p>
   <p>A/D || ⇦/⇨	: Rotate mesh (x axis)</p>
   <p>Mouse Wheel	: Zoom in/out</p>
@@ -54,3 +55,5 @@ MeshViewer allows you to display 3D objects of .ply, .obj & .stl formats. You ca
   <p>Ctrl + O	  : Open new file</p>
   <p>Ctrl + Q	  : Quit</p>
 </p>
+
+## Installation
