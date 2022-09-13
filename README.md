@@ -14,13 +14,17 @@
       <a href="#features">Installation</a>
     </p>
 </p>
-
-## Features
-<p>
-This is a basic mesh viewer made with QtCreator on C++ that allows you to display 3D meshes of .ply, .obj & .stl formats.
+<hr height="1">
+<p align="center">
+This is a basic mesh viewer made with Qt on C++ that allows you to display 3D meshes of .ply, .obj & .stl formats.
   <p align="center">
     <img src="readme/spin.gif" alt="Face only">
   </p>
+</p>
+
+## Features
+<p align="center">
+MeshViewer allows you to render 3D objects in "Face only", "Face + Wireframe" and "Wireframe" mods, with modifiable wireframe line width & color.
   <p align="center">
     <img src="readme/modes-face.png" alt="Face only" width="300" height="250">
     <img src="readme/modes-facewf.png" alt="Face + Wireframe" width="300" height="250">
@@ -32,9 +36,11 @@ This is a basic mesh viewer made with QtCreator on C++ that allows you to displa
 </p>
 
 ## Controls
-W/S || ⇧/⇩	: Rotate mesh (z axis)
-A/D || ⇦/⇨	: Rotate mesh (x axis)
-Mouse Wheel	: Zoom in/out
-Ctrl + N	  : New empty scene
-Ctrl + O	  : Open new file
-Ctrl + Q	  : Quit
+<p align="center">
+  <p>W/S || ⇧/⇩	: Rotate mesh (z axis)</p>
+  <p>A/D || ⇦/⇨	: Rotate mesh (x axis)</p>
+  <p>Mouse Wheel	: Zoom in/out</p>
+  <p>Ctrl + N	  : New empty scene</p>
+  <p>Ctrl + O	  : Open new file</p>
+  <p>Ctrl + Q	  : Quit</p>
+</p>
