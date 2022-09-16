@@ -57,3 +57,11 @@ MeshViewer allows you to display 3D objects of .ply, .obj & .stl formats. You ca
 </p>
 
 ## Installation
+
+<p>
+Currently, the best installation option is to <b> compile from source </b>.
+</p>
+<p>
+However, you can download the DistributionKit.zip archive based in the root folder of this repo and <b> run the .sh script </b>. It may require you to install the dependencies required by MeshViewer.
+<b> This installation option is not tested properly.</b> Work in progress.
+</p>
