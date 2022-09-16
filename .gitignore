@@ -63,3 +63,6 @@ mesh-viewer/img/icon-quit.png~
 mesh-viewer/img/icon-face.png~
 mesh-viewer/img/icon-wireframe-face.png~
 mesh-viewer/img/icon-wireframe.png~
+
+build/
+deploy/

@@ -53,9 +53,9 @@ Mesh::Mesh()
 
     // Configuring mesh
     meshEntity = new Qt3DRender::QMesh;
-    meshEntity->setSource(QUrl::fromLocalFile(meshFilePath));
+    //meshEntity->setSource(QUrl::fromLocalFile(meshFilePath));
     rootEntity->addComponent(meshEntity);
-    //meshEntity->setGeometry(nullptr);
+    meshEntity->setGeometry(nullptr);
     rootEntity->addComponent(wireframeMaterial);
 
     transform = new Qt3DCore::QTransform(entity);
