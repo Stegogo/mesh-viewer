@@ -109,7 +109,11 @@ void AppSkeleton::openFileDialog()
 void AppSkeleton::newScene()
 {
     view->getMesh()->meshEntity->setGeometry(nullptr);
+    view->getCamera()->setPosition(QVector3D(0, 0, 400.0f));
+    view->getCamera()->setViewCenter(QVector3D(0, 0, 0));
+    view->getCamera()->setFieldOfView(1);
     sidebar->logger->addItem("Loaded new scene");
+
 }
 
 //-----------------------------------------
