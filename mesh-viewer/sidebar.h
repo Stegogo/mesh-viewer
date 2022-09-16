@@ -3,15 +3,13 @@
 
 #include "mesh.h"
 #include "view3d.h"
-#include <QWidget>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QHBoxLayout>
-#include <QGridLayout>
-#include <QListWidget>
-#include <QColor>
-#include <QPixmap>
-#include <QPushButton>
-#include <QSlider>
+#include <QWidget>                  // inherited from
+#include <QtWidgets/QVBoxLayout>    // for layout
+#include <QtWidgets/QHBoxLayout>    // for layout
+#include <QListWidget>              // for logger
+#include <QColor>                   // for color picker
+#include <QPushButton>              // for buttons
+#include <QSlider>                  // for sliders
 
 //================================================
 // SIDEBAR CLASS
@@ -43,6 +41,7 @@ private slots:
     void pickLightMode();
     void setLightIntensity();
     void setLineWidth();
+
 private:
     QVBoxLayout *m_layout;
 

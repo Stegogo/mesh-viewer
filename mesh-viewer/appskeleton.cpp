@@ -1,22 +1,17 @@
 ﻿#include "appskeleton.h"
 
-#include <QToolBar>
-#include <QIcon>
-#include <QAction>
-#include <QMenu>
-#include <QMenuBar>
-#include <QStatusBar>
-#include <QFileDialog>
-#include <QDebug>
-#include <QtCore/QEvent>
-#include <QPainter>
-#include <QTimer>
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QMimeData>
-#include <Qt3DRender/QCamera>
-#include <Qt3DRender/QParameter>
+#include <QToolBar>                 // for toolbar
+#include <QIcon>                    // for toolbar icons
+#include <QAction>                  // for toolbar actions
+#include <QFileDialog>              // file open dialog
+#include <QDragEnterEvent>          // for drag & drop
+#include <QDropEvent>               // for drag & drop
+#include <QMimeData>                // for drag & drop
+#include <Qt3DRender/QCamera>       // managing camera
+#include <Qt3DRender/QParameter>    // managing material parameters
 
+//-----------------------------------------
+// Constructor
 AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
 {
     view = nullptr;
@@ -34,18 +29,14 @@ AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
     QToolBar *toolbar = addToolBar("Main toolbar");
 
     // Adding actions for toolbar
-    newTool = toolbar->addAction(QIcon(newFilePix),"New File");            // Add a 'New File' action to toolbar
-    openTool = toolbar->addAction(QIcon(openFilePix), "Open File");        // Add a 'Open File' action to toolbar
-
-    toolbar->addSeparator();                                                        // Separator --------------------
-
+    newTool = toolbar->addAction(QIcon(newFilePix),"New File");
+    openTool = toolbar->addAction(QIcon(openFilePix), "Open File");
+    toolbar->addSeparator();
     wireframeTool = toolbar->addAction(QIcon(wireframeViewPix),"Wireframe only");
     wireframeFaceTool = toolbar->addAction(QIcon(wireframeFaceViewPix),"Wireframe + Face");
     faceTool = toolbar->addAction(QIcon(faceViewPix),"Face only");
-
-    toolbar->addSeparator();                                                        // Separator --------------------
-
-    quitTool = toolbar->addAction(QIcon(quitPix), "Quit");                 // Add a 'Quit' action to toolbar
+    toolbar->addSeparator();
+    quitTool = toolbar->addAction(QIcon(quitPix), "Quit");
 
     // Add shortcuts
     newTool->setShortcut(tr("CTRL+N"));
@@ -66,10 +57,14 @@ AppSkeleton::AppSkeleton(QWidget *parent) : QMainWindow(parent)
     connect(faceTool, &QAction::triggered, this, &AppSkeleton::wireframeMode);
     connect(quitTool, &QAction::triggered, qApp, &QApplication::quit);
 
+    // accept drag & drop
     setAcceptDrops(true);
 
 }
 
+//-----------------------------------------
+// Setter for sidebar (also sets mesh for sidebar
+// and adds a corresponding logger entry)
 void AppSkeleton::setSidebar(Sidebar *newSidebar)
 {
     sidebar = newSidebar;
@@ -79,42 +74,54 @@ void AppSkeleton::setSidebar(Sidebar *newSidebar)
     sidebar->logger->addItem("Loaded new scene");
 }
 
+//-----------------------------------------
+// Setter for view
 void AppSkeleton::setView(View3D *newView)
 {
     view = newView;
-
 }
 
+//-----------------------------------------
+// Display an 'open file' dialog, and
+// reload mesh on success,
+// and inform about error otherwise
 void AppSkeleton::openFileDialog()
 {
     QString filePath = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::homePath(), tr("All known formats(*.ply *.obj *.stl);;.ply(*.ply);;.obj(*.obj);; Binary STL(*.stl)"));
 
+    // A restriction to open only .PLY, .OBJ or .STL files to avoid and catch errors
     if ((filePath.endsWith(".ply",Qt::CaseSensitive)) || (filePath.endsWith(".obj",Qt::CaseSensitive)) || (filePath.endsWith(".stl",Qt::CaseSensitive)))
     {
+        // Reload mesh
         view->getMesh()->meshEntity->setSource(QUrl::fromLocalFile(filePath));
         view->getCamera()->viewEntity((Qt3DCore::QEntity *)view->getMesh()->meshEntity);
+
         // Log action into the sidebar QList
         sidebar->logger->addItem("Loaded file: " + filePath);
     }
     else
-    {
        sidebar->logger->addItem("ERROR: Failed opening file");
-    }
 
 }
 
+//-----------------------------------------
+// Reset the scene, clear geometry
 void AppSkeleton::newScene()
 {
     view->getMesh()->meshEntity->setGeometry(nullptr);
     sidebar->logger->addItem("Loaded new scene");
 }
 
+//-----------------------------------------
+// Drag enter event
 void AppSkeleton::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasUrls())
         event->acceptProposedAction();
 }
 
+//-----------------------------------------
+// Drop event
 void AppSkeleton::dropEvent(QDropEvent *event)
 {
 
@@ -135,6 +142,8 @@ void AppSkeleton::dropEvent(QDropEvent *event)
     }
 }
 
+//-----------------------------------------
+// Wireframe mode selector for actions on the toolbaar
 void AppSkeleton::wireframeMode()
 {
     // Wireframe ONLY

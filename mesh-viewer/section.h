@@ -1,12 +1,12 @@
 #ifndef SECTION_H
 #define SECTION_H
 
-#include <QFrame>
-#include <QGridLayout>
-#include <QParallelAnimationGroup>
-#include <QScrollArea>
-#include <QToolButton>
-#include <QWidget>
+#include <QGridLayout>              // for layout
+#include <QFrame>                   // for animation
+#include <QParallelAnimationGroup>  // for animation
+#include <QScrollArea>              // scroll area
+#include <QToolButton>              // for expand button
+#include <QWidget>                  // inherit
 
 //================================================
 // SECTION CLASS
@@ -20,6 +20,7 @@ class Section : public QWidget
 public:
     static const int DEFAULT_DURATION = 0;
     explicit Section(const QString& title = "", const int animationDuration = DEFAULT_DURATION, QWidget* parent = 0);
+
     void setContentLayout(QLayout& contentLayout);
     void setTitle(QString title);
     void updateHeights();
@@ -28,13 +29,15 @@ public slots:
     void toggle(bool collapsed);
 
 private:
-    QGridLayout* mainLayout;
-    QToolButton* toggleButton;
-    QFrame* headerLine;
-    QParallelAnimationGroup* toggleAnimation;
-    QScrollArea* contentArea;
+    QGridLayout *mainLayout;
+    QToolButton *toggleButton;
+    QFrame *headerLine;
+    QParallelAnimationGroup *toggleAnimation;
+    QScrollArea *contentArea;
+
     int animationDuration;
     int collapsedHeight;
+
     bool isExpanded = false;
 };
 

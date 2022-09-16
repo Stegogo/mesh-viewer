@@ -3,28 +3,9 @@
 #include "view3d.h"
 #include "sidebar.h"
 
-
-#include <QApplication>
-#include <QtWidgets/QWidget>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QVBoxLayout>
-#include <QUrl>                                 // for working with URLs
-#include <Qt3DExtras/Qt3DWindow>                // for 3D view
-#include <Qt3DExtras/QPhongMaterial>            // for material
-#include <Qt3DExtras/QOrbitCameraController>    // for camera control
-#include <Qt3DCore/QEntity>                     // for working with 3d entities
-#include <Qt3DCore/QTransform>                  // for 3D transform
-#include <Qt3DRender/QMesh>                     // for working with meshes
-#include <Qt3DRender/QCamera>                   // for camera
-#include <Qt3DRender/QDirectionalLight>         // for light
 #include <Qt3DExtras/qforwardrenderer.h>        // for FrameGraph
-#include <Qt3DInput/QInputAspect>               // for 3D input                 
 #include <QSplitter>                            // for sidebar splitter
 #include <QSizeGrip>                            // for resizing the sidebar
-#include <QDebug>
-//#include <QtDataVisualization>
-//#include <Q3DSurface>
-#include <Qt3DExtras/QText2DEntity>
 
 int main(int argc, char *argv[])
 {
@@ -66,21 +47,16 @@ int main(int argc, char *argv[])
     CamController * camController = new CamController(view->getMesh()->rootEntity);
     camController->setCamera(camera);
 
-
     // Setting a spliiter for adjusting the sidebar size
     QSplitter* splitter = new QSplitter(Qt::Horizontal);
     splitter->addWidget(widget);
     splitter->addWidget(sidebar);
-
 
     // Set the initial sizes for QSplitter widgets
     splitter->setSizes(QList<int>{500, 200});
 
     view->setCamera(camera);
     view->setRootEntity(view->getMesh()->rootEntity);
-
-    //camera->viewEntity(view->getMesh()->rootEntity);
-    //camera->viewAll();
 
     mw.setWindowTitle(QStringLiteral("MeshView"));
     mw.setCentralWidget(splitter);

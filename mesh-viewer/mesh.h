@@ -1,14 +1,12 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include <QUrl>
-#include <Qt3DCore/QEntity>
-#include <QString>
-#include <Qt3DRender/QMesh>
-#include <Qt3DRender/QPointLight>
-#include <Qt3DExtras/QPhongMaterial>
-#include <Qt3DRender/QTechnique>
-#include <Qt3DCore/QTransform>
+#include <Qt3DCore/QEntity>     // for managing entities
+#include <Qt3DRender/QMesh>     // for mesh entitiy
+#include <Qt3DRender/QPointLight>   // light
+#include <Qt3DCore/QTransform>      // transform
+#include <QMaterial>                // for custom materials
+#include <Qt3DRender/QTechnique>    // for shader effects
 
 //================================================
 // MESH CLASS
@@ -40,11 +38,8 @@ public:
     Qt3DRender::QParameter *lightPosition;
     Qt3DRender::QParameter *lightColor;
 
-    QString getFilePath();
-    void setFilePath(QString filePath);
     void setLight(Qt3DRender::QPointLight *newLight);
     void addWireframeMaterial();
-    //void addFaceShadingMaterial();
 
 private:
     QString meshFilePath;

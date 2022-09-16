@@ -1,12 +1,11 @@
 #ifndef APPSKELETON_H
 #define APPSKELETON_H
 
-#include "sidebar.h"
-#include "view3d.h"
-#include <QApplication>
-#include <QUrl>
-#include <QMainWindow>
-#include <QWidget>
+#include "sidebar.h"    // for managing sidebar
+#include "view3d.h"     // for managing view
+#include <QApplication> // for overriding events
+#include <QMainWindow>  // inherited from
+#include <QWidget>      // parent
 
 //================================================
 // APP SKELETON CLASS

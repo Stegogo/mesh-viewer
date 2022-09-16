@@ -1,16 +1,15 @@
 #include "sidebar.h"
 #include "section.h"
 
-#include <QLabel>
-#include <QColorDialog>
-#include <Qt3DRender/QParameter>
-#include <QDebug>
-#include <QPalette>
-#include <QSlider>
+#include <QLabel>               // for options label
+#include <QColorDialog>         // for color picker
+#include <QPalette>             // for color picker
+#include <Qt3DRender/QParameter>// for controlling material
+#include <Qt3DRender/QEffect>   // for controlling material
+#include <Qt3DRender/QMaterial> // for controlling material
 
-#include <Qt3DRender/QEffect>
-#include <Qt3DRender/QMaterial>
-
+//-----------------------------------------
+// Constructor
 Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
 {
     m_layout = new QVBoxLayout();
@@ -162,7 +161,7 @@ Sidebar::Sidebar(QWidget *parent) : QWidget(parent)
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 }
 
-//---------------------------
+//-----------------------------------------
 // Picking and updating colors
 void Sidebar::pickColor()
 {
@@ -245,7 +244,7 @@ void Sidebar::pickColor()
         return;
 }
 
-//---------------------------
+//-----------------------------------------
 // Picking and updating lighting modes
 void Sidebar::pickLightMode()
 {
@@ -265,6 +264,8 @@ void Sidebar::pickLightMode()
     }
 }
 
+//-----------------------------------------
+// Control light intensity
 void Sidebar::setLightIntensity()
 {
     auto value = (float)sliderLight->value()/10;
@@ -272,47 +273,66 @@ void Sidebar::setLightIntensity()
     mesh->lightIntensity->setValue(QVector3D( value, value, value ));
 }
 
+//-----------------------------------------
+// Control line width
 void Sidebar::setLineWidth()
 {
     auto value = (float)sliderLine->value()/10;
     mesh->lineWidth->setValue(value);
 }
 
-const QColor &Sidebar::getSpecularColor() const
-{
-    return specularColor;
-}
-
-const QColor &Sidebar::getWireframeColor() const
-{
-    return wireframeColor;
-}
-
+//-----------------------------------------
+// Getter for light color
 const QColor &Sidebar::getLightColor() const
 {
     return lightColor;
 }
+
+//-----------------------------------------
+// Getter for ambient color
 const QColor &Sidebar::getAmbientColor() const
 {
     return ambientColor;
 }
 
+//-----------------------------------------
+// Getter for diffuse color
 const QColor &Sidebar::getDiffuseColor() const
 {
     return diffuseColor;
 }
 
+//-----------------------------------------
+// Getter for specular color
+const QColor &Sidebar::getSpecularColor() const
+{
+    return specularColor;
+}
+
+//-----------------------------------------
+// Getter for wireframe color
+const QColor &Sidebar::getWireframeColor() const
+{
+    return wireframeColor;
+}
+
+//-----------------------------------------
+// Setter for view
 void Sidebar::setView(View3D *newView)
 {
     view = newView;
 }
 
-Mesh *Sidebar::getMesh() const
-{
-    return mesh;
-}
-
+//-----------------------------------------
+// Setter for mesh
 void Sidebar::setMesh(Mesh *newMesh)
 {
     mesh = newMesh;
+}
+
+//-----------------------------------------
+// Getter for mesh
+Mesh *Sidebar::getMesh() const
+{
+    return mesh;
 }

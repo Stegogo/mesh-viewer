@@ -1,20 +1,15 @@
 #ifndef CAMCONTROLLER_H
 #define CAMCONTROLLER_H
 
-#include <Qt3DExtras/Qt3DWindow>
-#include <QtWidgets/QWidget>
-#include <Qt3DCore/QEntity>
-#include <Qt3DInput/QMouseDevice>
-#include <Qt3DInput/QKeyboardDevice>
-#include <Qt3DInput/QLogicalDevice>
-#include <Qt3DInput/QAction>
-#include <Qt3DInput/QActionInput>
-#include <Qt3DInput/QAxis>
-#include <Qt3DInput/QAnalogAxisInput>
-#include <Qt3DRender/QCamera>
-#include <Qt3DLogic/QFrameAction>
-#include <Qt3DInput/QWheelEvent>
-#include <Qt3DInput/QMouseHandler>
+#include <Qt3DInput/QMouseDevice>       // for registering mouse device
+#include <Qt3DInput/QKeyboardDevice>    // for registering keyboard device
+#include <Qt3DInput/QLogicalDevice>     // for registering logical device
+#include <Qt3DInput/QAction>            // for registering actions
+#include <Qt3DInput/QActionInput>       // action inputs
+#include <Qt3DInput/QAxis>              // for defining axes
+#include <Qt3DInput/QAnalogAxisInput>   // for detecting mouse input
+#include <Qt3DRender/QCamera>           // for camera
+#include <Qt3DLogic/QFrameAction>       // for binding keys to actions
 
 //================================================
 // CAM CONTROLLER CLASS
@@ -28,8 +23,8 @@ class CamController : public Qt3DCore::QEntity
 public:
     CamController(Qt3DCore::QNode *parent = Q_NULLPTR);
 
-    float lookSpeed() const;
-    float linearSpeed() const;
+    float getLookSpeed() const;
+    float getLinearSpeed() const;
 
     void setCamera(Qt3DRender::QCamera *newCamera);
     void setLookSpeed(float newLookSpeed);
@@ -41,39 +36,35 @@ protected slots:
     void frameActionTriggered(float dt);
 
 private:
-    Qt3DInput::QMouseDevice *m_mouseDevice;
-    Qt3DInput::QKeyboardDevice *m_keyboardDevice;
-    Qt3DInput::QLogicalDevice *m_logicalDevice;
+    Qt3DInput::QMouseDevice *mouseDevice;
+    Qt3DInput::QKeyboardDevice *keyboardDevice;
+    Qt3DInput::QLogicalDevice *logicalDevice;
 
-    Qt3DInput::QAction *m_keyUpAction;
-    Qt3DInput::QAction *m_keyDownAction;
-    Qt3DInput::QAction *m_keyLeftAction;
-    Qt3DInput::QAction *m_keyRightAction;
-    Qt3DInput::QAction *m_leftMouseAction;
-    Qt3DInput::QAction *m_rightMouseAction;
-    Qt3DInput::QAction *m_wheelInAction;
-    Qt3DInput::QAction *m_wheelOutAction;
+    Qt3DInput::QAction *keyUpAction;
+    Qt3DInput::QAction *keyDownAction;
+    Qt3DInput::QAction *keyLeftAction;
+    Qt3DInput::QAction *keyRightAction;
+    Qt3DInput::QAction *leftMouseAction;
+    Qt3DInput::QAction *rightMouseAction;
 
-    Qt3DInput::QActionInput *m_keyUpInput;
-    Qt3DInput::QActionInput *m_keyDownInput;
-    Qt3DInput::QActionInput *m_keyLeftInput;
-    Qt3DInput::QActionInput *m_keyRightInput;
-    Qt3DInput::QActionInput *m_leftMouseInput;
-    Qt3DInput::QActionInput *m_rightMouseInput;
-    Qt3DInput::QActionInput *m_wheelInInput;
-    Qt3DInput::QActionInput *m_wheelOutInput;
+    Qt3DInput::QActionInput *keyUpInput;
+    Qt3DInput::QActionInput *keyDownInput;
+    Qt3DInput::QActionInput *keyLeftInput;
+    Qt3DInput::QActionInput *keyRightInput;
+    Qt3DInput::QActionInput *leftMouseInput;
+    Qt3DInput::QActionInput *rightMouseInput;
 
-    Qt3DInput::QAxis *m_xAxis;
-    Qt3DInput::QAxis *m_yAxis;
+    Qt3DInput::QAxis *xAxis;
+    Qt3DInput::QAxis *yAxis;
 
-    Qt3DInput::QAnalogAxisInput *m_mouseXInput;
-    Qt3DInput::QAnalogAxisInput *m_mouseYInput;
+    Qt3DInput::QAnalogAxisInput *mouseXInput;
+    Qt3DInput::QAnalogAxisInput *mouseYInput;
 
-    Qt3DLogic::QFrameAction *m_frameAction;
+    Qt3DLogic::QFrameAction *frameAction;
 
-    Qt3DRender::QCamera *m_camera;
+    Qt3DRender::QCamera *camera;
 
-    float m_lookSpeed;
+    float lookSpeed;
     float m_linearSpeed;
     float m_dX;
     float m_dY;
@@ -85,8 +76,6 @@ private:
     bool m_keyRightPressed;
     bool m_leftMousePressed;
     bool m_rightMousePressed;
-    bool m_wheelInRoll;
-    bool m_wheelOutRoll;
 
 };
 

@@ -1,8 +1,8 @@
-#include <QPropertyAnimation>
-
 #include "section.h"
-#include <QDebug>
+#include <QPropertyAnimation>   // for animation
 
+//-----------------------------------------
+// Constructor
 Section::Section(const QString& title, const int animationDuration, QWidget* parent)
     : QWidget(parent), animationDuration(animationDuration)
 {
@@ -12,6 +12,7 @@ Section::Section(const QString& title, const int animationDuration, QWidget* par
     contentArea = new QScrollArea(this);
     mainLayout = new QGridLayout(this);
 
+    // Set toggle button
     toggleButton->setStyleSheet("QToolButton {border: none;}");
     toggleButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toggleButton->setArrowType(Qt::ArrowType::RightArrow);
@@ -25,11 +26,11 @@ Section::Section(const QString& title, const int animationDuration, QWidget* par
 
     contentArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-    // start out collapsed
+    // Start out collapsed
     contentArea->setMaximumHeight(0);
     contentArea->setMinimumHeight(0);
 
-    // let the entire widget grow and shrink with its content
+    // Let the entire widget grow and shrink with its content
     toggleAnimation->addAnimation(new QPropertyAnimation(this, "maximumHeight"));
     toggleAnimation->addAnimation(new QPropertyAnimation(this, "minimumHeight"));
     toggleAnimation->addAnimation(new QPropertyAnimation(contentArea, "maximumHeight"));
@@ -37,6 +38,7 @@ Section::Section(const QString& title, const int animationDuration, QWidget* par
     mainLayout->setVerticalSpacing(0);
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
+    // Set rows
     int row = 0;
     mainLayout->addWidget(toggleButton, row, 0, 1, 1, Qt::AlignLeft);
     mainLayout->addWidget(headerLine, row++, 2, 1, 1);
@@ -46,6 +48,8 @@ Section::Section(const QString& title, const int animationDuration, QWidget* par
     connect(toggleButton, &QToolButton::toggled, this, &Section::toggle);
 }
 
+//-----------------------------------------
+// State toggler
 void Section::toggle(bool expanded)
 {
     toggleButton->setArrowType(expanded ? Qt::ArrowType::DownArrow : Qt::ArrowType::RightArrow);
@@ -54,6 +58,8 @@ void Section::toggle(bool expanded)
     this->isExpanded = expanded;
 }
 
+//-----------------------------------------
+// Content layout setter & height control
 void Section::setContentLayout(QLayout& contentLayout)
 {
     delete contentArea->layout();
@@ -62,11 +68,15 @@ void Section::setContentLayout(QLayout& contentLayout)
     updateHeights();
 }
 
+//-----------------------------------------
+// Setter for title
 void Section::setTitle(QString title)
 {
     toggleButton->setText(std::move(title));
 }
 
+//-----------------------------------------
+// Height control
 void Section::updateHeights()
 {
     int contentHeight = contentArea->layout()->sizeHint().height();
